@@ -27,11 +27,11 @@ export default function Home() {
   }, [])
 
   return (
-    <main className="min-h-screen bg-book-cream">
-      <header className="bg-book-brown text-book-cream shadow-lg">
+    <main className="min-h-screen bg-fab-pink">
+      <header className="bg-fab-dark text-white shadow-lg">
         <div className="max-w-7xl mx-auto px-4 py-8">
           <h1 className="text-4xl font-bold">Fabulosa Books</h1>
-          <p className="text-book-gold mt-2">Employee Schedule</p>
+          <p className="text-fab-pink mt-2">Employee Schedule</p>
         </div>
       </header>
 
@@ -43,7 +43,7 @@ export default function Home() {
         )}
 
         {isLoading ? (
-          <div className="text-center text-book-brown py-8">
+          <div className="text-center text-fab-dark py-8">
             <p className="text-lg">Loading schedule...</p>
           </div>
         ) : (

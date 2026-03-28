@@ -9,11 +9,14 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        'book-amber': '#D4A574',
-        'book-brown': '#8B6F47',
-        'book-dark': '#3E2723',
-        'book-cream': '#FFF8F0',
-        'book-gold': '#C9A876',
+        'fab-pink': '#EFA8EE',
+        'fab-dark': '#222222',
+        'fab-purple': '#5040AE',
+        'fab-crimson': '#8D2424',
+        'fab-cream': '#FAF9F5',
+        'fab-purple-light': '#6B5CE7',
+        'fab-pink-light': '#F5C6F5',
+        'fab-pink-deep': '#D580D4',
       },
     },
   },

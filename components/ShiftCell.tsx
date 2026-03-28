@@ -61,9 +61,9 @@ export default function ShiftCell({
   const currentEmployeeData = employees.find((e) => e.name === currentEmployee)
   const bgColor = currentEmployee
     ? currentEmployeeData?.is_on_call
-      ? 'bg-book-brown text-book-cream'
-      : 'bg-book-gold text-book-dark'
-    : 'bg-gray-200 text-book-dark'
+      ? 'bg-fab-crimson text-white'
+      : 'bg-fab-purple text-white'
+    : 'bg-fab-pink-light text-fab-dark'
 
   return (
     <div className="relative" ref={dropdownRef}>
@@ -76,18 +76,18 @@ export default function ShiftCell({
       </button>
 
       {isOpen && (
-        <div className="absolute top-full mt-1 left-0 right-0 bg-white border border-book-brown rounded shadow-lg z-10 max-h-64 overflow-y-auto">
+        <div className="absolute top-full mt-1 left-0 right-0 bg-white border border-fab-dark rounded shadow-lg z-10 max-h-64 overflow-y-auto">
           {/* Clear selection option */}
           <button
             onClick={() => handleSelect(null)}
-            className="w-full text-left px-3 py-2 text-sm hover:bg-book-cream transition border-b border-book-gold text-book-dark"
+            className="w-full text-left px-3 py-2 text-sm hover:bg-fab-pink-light transition border-b border-fab-pink-deep text-fab-dark"
           >
             — No Assignment —
           </button>
 
           {/* Regular employees */}
-          <div className="border-b border-book-gold">
-            <div className="px-3 py-1 text-xs font-semibold text-book-brown bg-book-cream sticky top-0">
+          <div className="border-b border-fab-pink-deep">
+            <div className="px-3 py-1 text-xs font-semibold text-white bg-fab-purple sticky top-0">
               Regular
             </div>
             {employees
@@ -96,8 +96,8 @@ export default function ShiftCell({
                 <button
                   key={emp.id}
                   onClick={() => handleSelect(emp.name)}
-                  className={`w-full text-left px-3 py-2 text-sm hover:bg-book-cream transition ${
-                    currentEmployee === emp.name ? 'bg-book-gold' : ''
+                  className={`w-full text-left px-3 py-2 text-sm hover:bg-fab-pink-light transition ${
+                    currentEmployee === emp.name ? 'bg-fab-pink' : ''
                   }`}
                 >
                   {emp.name}
@@ -107,7 +107,7 @@ export default function ShiftCell({
 
           {/* On-call employees */}
           <div>
-            <div className="px-3 py-1 text-xs font-semibold text-book-brown bg-book-cream sticky top-0">
+            <div className="px-3 py-1 text-xs font-semibold text-white bg-fab-crimson sticky top-0">
               On-Call
             </div>
             {employees
@@ -116,8 +116,8 @@ export default function ShiftCell({
                 <button
                   key={emp.id}
                   onClick={() => handleSelect(emp.name)}
-                  className={`w-full text-left px-3 py-2 text-sm hover:bg-book-cream transition ${
-                    currentEmployee === emp.name ? 'bg-book-gold' : ''
+                  className={`w-full text-left px-3 py-2 text-sm hover:bg-fab-pink-light transition ${
+                    currentEmployee === emp.name ? 'bg-fab-pink' : ''
                   }`}
                 >
                   {emp.name}

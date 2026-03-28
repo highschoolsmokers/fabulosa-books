@@ -88,7 +88,7 @@ export default function ScheduleGrid({ employees }: { employees: Employee[] }) {
 
   if (isLoading) {
     return (
-      <div className="text-center text-book-brown py-8">
+      <div className="text-center text-fab-dark py-8">
         <p>Loading schedule...</p>
       </div>
     )
@@ -97,10 +97,10 @@ export default function ScheduleGrid({ employees }: { employees: Employee[] }) {
   return (
     <div className="space-y-6">
       {/* Navigation */}
-      <div className="flex items-center justify-between bg-book-brown text-book-cream rounded-lg p-4">
+      <div className="flex items-center justify-between bg-fab-dark text-white rounded-lg p-4">
         <button
           onClick={goToPreviousWeek}
-          className="px-4 py-2 bg-book-gold text-book-dark rounded hover:bg-book-amber transition"
+          className="px-4 py-2 bg-fab-purple text-white rounded hover:bg-fab-purple-light transition"
         >
           ← Previous Week
         </button>
@@ -109,7 +109,7 @@ export default function ScheduleGrid({ employees }: { employees: Employee[] }) {
           <h2 className="text-xl font-semibold">
             Week of {formatDate(new Date(weekStart))}
           </h2>
-          <p className="text-sm text-book-gold">
+          <p className="text-sm text-fab-pink">
             {weekStart} to{' '}
             {new Date(new Date(weekStart).getTime() + 6 * 24 * 60 * 60 * 1000)
               .toISOString()
@@ -120,13 +120,13 @@ export default function ScheduleGrid({ employees }: { employees: Employee[] }) {
         <div className="flex gap-2">
           <button
             onClick={goToThisWeek}
-            className="px-4 py-2 bg-book-gold text-book-dark rounded hover:bg-book-amber transition"
+            className="px-4 py-2 bg-fab-purple text-white rounded hover:bg-fab-purple-light transition"
           >
             This Week
           </button>
           <button
             onClick={goToNextWeek}
-            className="px-4 py-2 bg-book-gold text-book-dark rounded hover:bg-book-amber transition"
+            className="px-4 py-2 bg-fab-purple text-white rounded hover:bg-fab-purple-light transition"
           >
             Next Week →
           </button>
@@ -135,9 +135,9 @@ export default function ScheduleGrid({ employees }: { employees: Employee[] }) {
 
       {/* Schedule Table */}
       <div className="overflow-x-auto">
-        <table className="w-full border-collapse bg-white rounded-lg overflow-hidden shadow-md">
+        <table className="w-full border-collapse bg-fab-cream rounded-lg overflow-hidden shadow-md">
           <thead>
-            <tr className="bg-book-brown text-book-cream">
+            <tr className="bg-fab-dark text-white">
               <th className="p-4 text-left font-semibold">Shift</th>
               {DAYS_OF_WEEK.map((day, index) => {
                 const date = getDateFromDayOfWeek(weekStart, index)
@@ -145,7 +145,7 @@ export default function ScheduleGrid({ employees }: { employees: Employee[] }) {
                 return (
                   <th key={day} className="p-4 text-center font-semibold">
                     <div>{day}</div>
-                    <div className="text-sm text-book-gold">{dateStr}</div>
+                    <div className="text-sm text-fab-pink">{dateStr}</div>
                   </th>
                 )
               })}
@@ -153,8 +153,8 @@ export default function ScheduleGrid({ employees }: { employees: Employee[] }) {
           </thead>
           <tbody>
             {['opening', 'mid', 'closing'].map((shiftType) => (
-              <tr key={shiftType} className="border-t border-book-gold">
-                <td className="p-4 font-semibold text-book-brown bg-book-cream">
+              <tr key={shiftType} className="border-t border-fab-pink-deep">
+                <td className="p-4 font-semibold text-fab-dark bg-fab-pink-light">
                   {shiftType === 'opening'
                     ? 'Opening (10am–4pm)'
                     : shiftType === 'mid'
@@ -180,19 +180,19 @@ export default function ScheduleGrid({ employees }: { employees: Employee[] }) {
       </div>
 
       {/* Legend */}
-      <div className="bg-white rounded-lg p-4 shadow-md">
-        <h3 className="font-semibold text-book-brown mb-2">Legend</h3>
+      <div className="bg-fab-cream rounded-lg p-4 shadow-md">
+        <h3 className="font-semibold text-fab-dark mb-2">Legend</h3>
         <div className="flex flex-wrap gap-6 text-sm">
           <div className="flex items-center gap-2">
-            <div className="w-4 h-4 bg-book-gold rounded"></div>
+            <div className="w-4 h-4 bg-fab-purple rounded"></div>
             <span>Regular Employee</span>
           </div>
           <div className="flex items-center gap-2">
-            <div className="w-4 h-4 bg-book-brown rounded"></div>
+            <div className="w-4 h-4 bg-fab-crimson rounded"></div>
             <span>On-Call / As-Needed</span>
           </div>
           <div className="flex items-center gap-2">
-            <div className="w-4 h-4 bg-gray-200 rounded"></div>
+            <div className="w-4 h-4 bg-fab-pink-light rounded"></div>
             <span>Unassigned</span>
           </div>
         </div>
