@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fabulosa Books Schedule - App Preview</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: #f5f5f5;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            width: 700px;
+            margin: 0 auto;
+            background: #FFF8F0;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        header {
+            background: linear-gradient(135deg, #8B6F5C 0%, #6B4423 100%);
+            color: #FFF8F0;
+            padding: 24px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 28px;
+            margin-bottom: 4px;
+            font-weight: 600;
+        }
+
+        header p {
+            font-size: 14px;
+            opacity: 0.95;
+            color: #D4A574;
+        }
+
+        .controls {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 24px;
+            background: #fefbf7;
+            border-bottom: 1px solid #ede4d9;
+        }
+
+        .week-nav {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .week-nav button {
+            background: #D4A574;
+            border: none;
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+
+        .week-nav button:hover {
+            background: #c99560;
+        }
+
+        .week-nav button:active {
+            transform: scale(0.95);
+        }
+
+        .week-label {
+            font-size: 13px;
+            color: #8B6F5C;
+            font-weight: 500;
+            min-width: 140px;
+            text-align: center;
+        }
+
+        .schedule-wrapper {
+            overflow-x: auto;
+            padding: 0 24px 24px;
+        }
+
+        .schedule {
+            border-collapse: collapse;
+            width: 100%;
+            border-spacing: 0;
+        }
+
+        .schedule th {
+            background: #5B8A8A;
+            color: white;
+            padding: 12px 8px;
+            text-align: center;
+            font-size: 13px;
+            font-weight: 600;
+            border: none;
+        }
+
+        .schedule th:first-child {
+            background: #8B6F5C;
+            text-align: left;
+            padding-left: 12px;
+        }
+
+        .schedule td {
+            padding: 0;
+            border: 1px solid #d4cfc4;
+            height: 60px;
+            vertical-align: top;
+            background: white;
+            font-size: 11px;
+            position: relative;
+        }
+
+        .schedule td:first-child {
+            background: #f5f0e8;
+            border-right: 2px solid #8B6F5C;
+            padding: 8px;
+            font-weight: 500;
+            color: #6B2D3E;
+            min-width: 80px;
+        }
+
+        .shift-cell {
+            padding: 4px;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            position: relative;
+        }
+
+        .shift-name {
+            font-size: 10px;
+            color: #8B6F5C;
+            font-weight: 600;
+            margin-bottom: 2px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .employee-name {
+            background: linear-gradient(135deg, #5B8A8A, #5B9999);
+            color: white;
+            padding: 3px 5px;
+            border-radius: 3px;
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+        }
+
+        .shift-empty {
+            background: #f9f6f1;
+            color: #bbb;
+            padding: 3px 5px;
+            font-style: italic;
+            display: flex;
+            align-items: center;
+            flex-grow: 1;
+        }
+
+        /* Employee color coding */
+        .emp-alvin {
+            background: linear-gradient(135deg, #5B8A8A, #5B9999);
+        }
+
+        .emp-melissa {
+            background: linear-gradient(135deg, #6B4423, #8B5c3c);
+        }
+
+        .emp-marcus {
+            background: linear-gradient(135deg, #7a5c4f, #9b7b6c);
+        }
+
+        .emp-jordan {
+            background: linear-gradient(135deg, #5B8A8A, #5B9999);
+        }
+
+        .emp-casey {
+            background: linear-gradient(135deg, #6B2D3E, #8B3d4e);
+        }
+
+        .emp-parker {
+            background: linear-gradient(135deg, #8B6F5C, #ab8f7c);
+        }
+
+        .emp-alex {
+            background: linear-gradient(135deg, #5B8A8A, #5B9999);
+        }
+
+        .footer {
+            padding: 16px 24px;
+            background: #fefbf7;
+            border-top: 1px solid #ede4d9;
+            font-size: 12px;
+            color: #8B6F5C;
+            text-align: center;
+        }
+
+        .footer-note {
+            font-style: italic;
+            opacity: 0.8;
+            margin-top: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Fabulosa Books</h1>
+            <p>Employee Schedule</p>
+        </header>
+
+        <div class="controls">
+            <div class="week-nav">
+                <button>←</button>
+                <span class="week-label">Mar 24 - Mar 30</span>
+                <button>→</button>
+            </div>
+        </div>
+
+        <div class="schedule-wrapper">
+            <table class="schedule">
+                <thead>
+                    <tr>
+                        <th>Shift</th>
+                        <th>Monday</th>
+                        <th>Tuesday</th>
+                        <th>Wednesday</th>
+                        <th>Thursday</th>
+                        <th>Friday</th>
+                        <th>Saturday</th>
+                        <th>Sunday</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Opening Shift: 10am-4pm -->
+                    <tr>
+                        <td>Opening<br><span style="font-size: 10px; opacity: 0.7;">10am–4pm</span></td>
+                        <td>
+                            <div class="shift-cell">
+                                <div class="shift-name">Opening</div>
+                                <div class="employee-name emp-alvin">Alvin</div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="shift-cell">
+                                <div class="shift-name">Opening</div>
+                                <div class="employee-name emp-melissa">Melissa</div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="shift-cell">
+                                <div class="shift-name">Opening</div>
+                                <div class="employee-name emp-marcus">Marcus</div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="shift-cell">
+                                <div class="shift-name">Opening</div>
+                                <div class="employee-name emp-jordan">Jordan</div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="shift-cell">
+                                <div class="shift-name">Opening</div>
+                                <div class="employee-name emp-alvin">Alvin</div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="shift-cell">
+                                <div class="shift-name">Opening</div>
+                                <div class="employee-name emp-casey">Casey</div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="shift-cell">
+                                <div class="shift-name">Opening</div>
+                                <div class="employee-name emp-parker">Parker</div>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <!-- Mid Shift: 12pm-6pm -->
+                    <tr>
+                        <td>Mid<br><span style="font-size: 10px; opacity: 0.7;">12pm–6pm</span></td>
+                        <td>
+                            <div class="shift-cell">
+                                <div class="shift-name">Mid</div>
+                                <div class="employee-name emp-casey">Casey</div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="shift-cell">
+                                <div class="shift-name">Mid</div>
+                                <div class="employee-name emp-alex">Alex</div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="shift-cell">
+                                <div class="shift-name">Mid</div>
+                                <div class="employee-name emp-parker">Parker</div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="shift-cell">
+                                <div class="shift-name">Mid</div>
+                                <div class="employee-name emp-alvin">Alvin</div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="shift-cell">
+                                <div class="shift-name">Mid</div>
+                                <div class="employee-name emp-melissa">Melissa</div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="shift-cell">
+                                <div class="shift-name">Mid</div>
+                                <div class="employee-name emp-marcus">Marcus</div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="shift-cell">
+                                <div class="shift-name">Mid</div>
+                                <div class="employee-name emp-jordan">Jordan</div>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <!-- Closing Shift: 2pm-8pm/9pm Sat -->
+                    <tr>
+                        <td>Closing<br><span style="font-size: 10px; opacity: 0.7;">2pm–8/9pm</span></td>
+                        <td>
+                            <div class="shift-cell">
+                                <div class="shift-name">Closing</div>
+                                <div class="employee-name emp-parker">Parker</div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="shift-cell">
+                                <div class="shift-name">Closing</div>
+                                <div class="employee-name emp-jordan">Jordan</div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="shift-cell">
+                                <div class="shift-name">Closing</div>
+                                <div class="employee-name emp-casey">Casey</div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="shift-cell">
+                                <div class="shift-name">Closing</div>
+                                <div class="employee-name emp-alex">Alex</div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="shift-cell">
+                                <div class="shift-name">Closing</div>
+                                <div class="employee-name emp-marcus">Marcus</div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="shift-cell">
+                                <div class="shift-name">Closing</div>
+                                <div class="employee-name emp-melissa">Melissa</div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="shift-cell">
+                                <div class="shift-name">Closing</div>
+                                <div class="employee-name emp-alvin">Alvin</div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="footer">
+            <strong>Legend:</strong> Each cell shows which employee is assigned to that shift
+            <div class="footer-note">Click on any assignment to edit or swap shifts</div>
+        </div>
+    </div>
+</body>
+</html>
