@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Part 3: Setting Up Shop</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Part 3: Setting Up</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;600;700;900&display=swap" rel="stylesheet">
@@ -21,153 +21,237 @@
     </nav>
     <header>
       <div class="part-label">Part 3</div>
-      <h1>Setting Up Shop</h1>
+      <h1>Setting Up</h1>
     </header>
     <main id="main">
 
       <div class="section">
-        <h2>Before We Write a Single Line of Code</h2>
+        <h2>Create the project</h2>
         <div class="section-content">
-          <p>Building a web app is a bit like opening a bookstore. Before you arrange the shelves or order inventory, you need a space. You need keys. You need a plan for how things will be organized.</p>
-          <p>In web development, that space is your "development environment"&mdash;the set of tools and accounts that let you write code, test it, and eventually put it online for everyone to see.</p>
+          <p>Check your Node version first. The app needs Node 22 or later.</p>
+<pre><code class="language-bash">node --version</code></pre>
+          <div class="step">Step 1: Create the folder and install the packages</div>
+<pre><code class="language-bash">mkdir fabulosa-scheduler &amp;&amp; cd fabulosa-scheduler
+npm init -y
+npm install ai @ai-sdk/react next react react-dom zod @neondatabase/serverless
+npm install -D typescript @types/react @types/react-dom @types/node vitest @ai-sdk/provider</code></pre>
+          <p><code>ai</code> is the AI SDK: the agent class, tools, and streaming. <code>@ai-sdk/react</code> holds the <code>useChat</code> hook. <code>@ai-sdk/provider</code> is only for the tests, which build a fake model from its types.</p>
+          <div class="step">Step 2: Set up package.json</div>
+          <p>Replace the generated <code>package.json</code> with this one. Your version numbers may be newer.</p>
+<pre><code class="language-json" data-source="package.json">{
+  "name": "fabulosa-scheduling-agent",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": "&gt;=22"
+  },
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "db:setup": "node --env-file-if-exists=.env.local scripts/setup-db.ts",
+    "eval": "vitest run --config vitest.evals.config.ts",
+    "snippets": "node scripts/snippets.ts",
+    "snippets:check": "node scripts/snippets.ts --check"
+  },
+  "dependencies": {
+    "@ai-sdk/react": "^4.0.181",
+    "@neondatabase/serverless": "^1.2.1",
+    "ai": "^7.0.177",
+    "next": "^16.4.6",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@ai-sdk/provider": "^4.0.39",
+    "@types/node": "^26.6.6",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "typescript": "^7.0.2",
+    "vitest": "^5.1.1"
+  }
+}</code></pre>
+          <p><code>"type": "module"</code> lets Node run the TypeScript scripts in <code>scripts/</code> directly. Node 22 and later strip the types at load time, so the scripts need no build step.</p>
         </div>
       </div>
 
       <div class="section">
-        <h2>What You'll Need</h2>
+        <h2>Configure TypeScript, Next.js, and Vitest</h2>
         <div class="section-content">
-          <div class="step">Step 8: Install Node.js</div>
-          <p>Node.js is the engine that runs JavaScript outside of a web browser. When we write our Next.js app, Node.js is what actually runs it on your machine while you're building and testing.</p>
-          <p>Go to <a href="https://nodejs.org">nodejs.org</a> and download the version labeled "LTS" (Long Term Support). Install it like any other program. Then open your terminal and verify:</p>
-<pre><code>node --version</code></pre>
-          <div class="image-placeholder">Terminal showing <code>node --version</code> with output like <code>v22.x.x</code></div>
+          <div class="step">Step 3: Create tsconfig.json</div>
+<pre><code class="language-json" data-source="tsconfig.json">{
+  "compilerOptions": {
+    "target": "ES2023",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "ES2023"
+    ],
+    "strict": true,
+    "noEmit": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "allowImportingTsExtensions": true,
+    "jsx": "react-jsx",
+    "incremental": true,
+    "skipLibCheck": true,
+    "paths": {
+      "@/*": [
+        "./*"
+      ]
+    },
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "allowJs": true,
+    "esModuleInterop": true
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    ".next/dev/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}</code></pre>
+          <p>The <code>@/*</code> path lets any file import from the project root, as in <code>@/lib/rules</code>. Next.js adds <code>allowJs</code>, <code>esModuleInterop</code>, and the <code>.next</code> includes the first time it builds; they're listed here so the file doesn't change under you.</p>
+          <div class="step">Step 4: Create next.config.ts and vitest.config.ts</div>
+<pre><code class="language-ts" data-source="next.config.ts">import type { NextConfig } from 'next'
 
-          <div class="step">Step 9: Install a code editor</div>
-          <p>Download Visual Studio Code from <a href="https://code.visualstudio.com">code.visualstudio.com</a>. It's free, and it's what most developers use.</p>
+const nextConfig: NextConfig = {}
 
-          <div class="step">Step 10: Create a GitHub account</div>
-          <p>Sign up at <a href="https://github.com">github.com</a>. GitHub is like a cloud backup for code, but smarter&mdash;it tracks every change you make, so you can always go back if something breaks.</p>
+export default nextConfig</code></pre>
+<pre><code class="language-ts" data-source="vitest.config.ts">import { fileURLToPath } from 'node:url'
+import { defineConfig } from 'vitest/config'
+
+export default defineConfig({
+  resolve: {
+    alias: { '@': fileURLToPath(new URL('.', import.meta.url)) },
+  },
+  test: {
+    include: ['tests/**/*.test.ts'],
+  },
+})</code></pre>
+          <p>Vitest needs the same <code>@</code> alias as TypeScript. It picks up tests in <code>tests/</code>; the evals in Part 8 have a config of their own, so <code>npm test</code> never calls a real model.</p>
+          <div class="step">Step 5: Create .gitignore</div>
+<pre><code class="language-plaintext">node_modules/
+.next/
+.env*.local
+.vercel
+next-env.d.ts
+*.tsbuildinfo</code></pre>
         </div>
       </div>
 
       <div class="section">
-        <h2>Git: Your Safety Net</h2>
+        <h2>Link Vercel, add Neon, pull the environment</h2>
         <div class="section-content">
-          <div class="step">Step 11: Understand what Git does</div>
-          <p>Git tracks changes to your files. Every time you make a meaningful change to your code, you tell Git, "Hey, save this version." Git remembers. If you break something tomorrow, you can go back to today's version.</p>
-          <p>GitHub is where your Git history lives online. Your computer has a copy. GitHub has a copy. They stay in sync. And when we connect GitHub to Vercel later, every time you push new code to GitHub, Vercel will automatically update your live website.</p>
-          <img src="images/git-workflow.svg" alt="Git workflow: code to GitHub to Vercel auto-deploy">
+          <p>The app needs two credentials: a Postgres connection string and access to the AI Gateway. Both come from Vercel, and neither goes in your code.</p>
+          <div class="step">Step 6: Link the folder to a Vercel project</div>
+<pre><code class="language-bash">npm install -g vercel
+vercel link</code></pre>
+          <p><code>vercel link</code> asks for your team and creates a project, or links an existing one. It writes a <code>.vercel</code> folder, which <code>.gitignore</code> already excludes.</p>
+          <div class="step">Step 7: Add a Neon database</div>
+          <p>In the Vercel dashboard, open the project, go to <strong>Storage</strong>, and create a Neon Postgres database connected to the project. Vercel adds <code>DATABASE_URL</code> to the project's environment variables.</p>
+          <div class="step">Step 8: Pull the environment</div>
+<pre><code class="language-bash">vercel env pull .env.local</code></pre>
+          <p>This writes <code>DATABASE_URL</code> and <code>VERCEL_OIDC_TOKEN</code> to <code>.env.local</code>. The AI SDK uses the OIDC token to reach the AI Gateway, so the app needs no Anthropic key. The token expires after about twelve hours; run <code>vercel env pull</code> again when model calls start failing with an authentication error. Deployed on Vercel, the app gets a fresh token on every request.</p>
         </div>
       </div>
 
       <div class="section">
-        <h2>Creating the Project</h2>
+        <h2>Create the tables</h2>
         <div class="section-content">
-          <div class="step">Step 12: Create the Next.js project</div>
-          <p>Open your terminal and run:</p>
-<pre><code>npx create-next-app@latest fabulosa-scheduler</code></pre>
-          <p>When prompted, answer:</p>
-          <ul>
-            <li><strong>TypeScript?</strong> Yes</li>
-            <li><strong>ESLint?</strong> Yes</li>
-            <li><strong>Tailwind CSS?</strong> Yes</li>
-            <li><strong><code>src/</code> directory?</strong> No</li>
-            <li><strong>App Router?</strong> Yes</li>
-            <li><strong>Customize import alias?</strong> No</li>
-          </ul>
+          <div class="step">Step 9: Create lib/db/schema.sql</div>
+<pre><code class="language-sql" data-source="lib/db/schema.sql#schema">CREATE TABLE IF NOT EXISTS employees (
+  id                  TEXT PRIMARY KEY,
+  name                TEXT NOT NULL,
+  kind                TEXT NOT NULL CHECK (kind IN ('regular', 'on-call')),
+  key_holder          BOOLEAN NOT NULL DEFAULT FALSE,
+  max_shifts_per_week INTEGER NOT NULL CHECK (max_shifts_per_week BETWEEN 0 AND 7)
+);
 
-          <div class="step">Step 13: Enter the project and start the dev server</div>
-<pre><code>cd fabulosa-scheduler
-npm run dev</code></pre>
-          <p>Open your browser and go to <code>http://localhost:3000</code>. You should see the Next.js welcome page.</p>
+CREATE TABLE IF NOT EXISTS unavailability (
+  employee_id TEXT NOT NULL REFERENCES employees(id) ON DELETE CASCADE,
+  day         SMALLINT NOT NULL CHECK (day BETWEEN 0 AND 6),
+  shifts      TEXT[]          -- NULL means the whole day
+);
 
-          <div class="step">Step 14: Install the AI SDK and Zod</div>
-          <p>Stop the dev server (Ctrl+C) and install the packages we'll need for agents:</p>
-<pre><code>npm install ai @ai-sdk/react zod</code></pre>
-          <ul>
-            <li><code>ai</code> &mdash; the core Vercel AI SDK (agents, tools, streaming)</li>
-            <li><code>@ai-sdk/react</code> &mdash; React hooks for chat interfaces (<code>useChat</code>)</li>
-            <li><code>zod</code> &mdash; schema validation for tool inputs</li>
-          </ul>
+CREATE TABLE IF NOT EXISTS time_off (
+  employee_id TEXT NOT NULL REFERENCES employees(id) ON DELETE CASCADE,
+  date        DATE NOT NULL,
+  reason      TEXT,
+  PRIMARY KEY (employee_id, date)
+);
 
-          <div class="step">Step 15: Install the Neon serverless driver</div>
-<pre><code>npm install @neondatabase/serverless</code></pre>
-          <p>For local development, we'll also use a lightweight SQLite stand-in:</p>
-<pre><code>npm install sql.js
-npm install --save-dev @types/sql-js</code></pre>
-        </div>
-      </div>
+CREATE TABLE IF NOT EXISTS assignments (
+  week_start  DATE NOT NULL CHECK (EXTRACT(DOW FROM week_start) = 0),
+  day         SMALLINT NOT NULL CHECK (day BETWEEN 0 AND 6),
+  shift       TEXT NOT NULL CHECK (shift IN ('opening', 'mid', 'closing')),
+  employee_id TEXT NOT NULL REFERENCES employees(id),
+  PRIMARY KEY (week_start, day, shift)
+);</code></pre>
+          <p>The schema enforces what it can. <code>CHECK</code> constraints reject a week start that isn't a Sunday and a shift that doesn't exist. The primary key on <code>assignments</code> allows one person per shift. Rules that depend on more than one row, such as weekly limits and availability, live in <code>validateSchedule</code> in Part 4.</p>
+          <div class="step">Step 10: Create scripts/setup-db.ts</div>
+          <p>This script runs the schema and loads the staff. It imports <code>lib/seed.ts</code>, which you'll create in Part 4, so run it at the end of that part.</p>
+<pre><code class="language-ts" data-source="scripts/setup-db.ts">// Create the tables and load the fictional staff.
+// Run with: npm run db:setup  (reads DATABASE_URL from .env.local)
+import { readFile } from 'node:fs/promises'
+import { neon } from '@neondatabase/serverless'
+import { STAFF, UNAVAILABILITY } from '../lib/seed.ts'
 
-      <div class="section">
-        <h2>Putting It on GitHub</h2>
-        <div class="section-content">
-          <div class="step">Step 16: Initialize Git and push to GitHub</div>
-<pre><code>git init
-git add -A
-git commit -m "Initial commit: Fabulosa Books multi-agent scheduler"</code></pre>
-          <p>Go to <a href="https://github.com">github.com</a>, click "+", choose "New repository", name it <code>fabulosa-scheduler</code>, and create it. Then run:</p>
-<pre><code>git remote add origin https://github.com/YOUR-USERNAME/fabulosa-scheduler.git
-git branch -M main
-git push -u origin main</code></pre>
-        </div>
-      </div>
+const url = process.env.DATABASE_URL
+if (!url) {
+  console.error('DATABASE_URL is not set. Run `vercel env pull .env.local` first.')
+  process.exit(1)
+}
+const sql = neon(url)
 
-      <div class="section">
-        <h2>Connecting to Vercel</h2>
-        <div class="section-content">
-          <div class="step">Step 17: Deploy to Vercel</div>
-          <p>Go to <a href="https://vercel.com">vercel.com</a> and sign up with your GitHub account. Click "Add New Project," find <code>fabulosa-scheduler</code>, and click "Import." Vercel detects it's a Next.js project automatically. Click "Deploy."</p>
-          <p>Wait about a minute. When it's done, you'll see a celebration screen with a link to your live site.</p>
-          <div class="image-placeholder">Vercel deployment success page with confetti and the live URL</div>
-        </div>
-      </div>
+const schema = await readFile(new URL('../lib/db/schema.sql', import.meta.url), 'utf8')
+for (const statement of schema.split(';').map((s) =&gt; s.replace(/--.*$/gm, '').trim()).filter(Boolean)) {
+  await sql.query(statement)
+}
 
-      <div class="section">
-        <h2>Adding the Database</h2>
-        <div class="section-content">
-          <div class="step">Step 18: Create a Neon database through Vercel</div>
-          <p>From your Vercel project dashboard, go to the "Storage" tab. Click "Create Database" and choose Neon. Create a free Postgres database and connect it to all three environments (Development, Preview, Production).</p>
-          <p>Vercel creates an environment variable called <code>DATABASE_URL</code> that connects your app to the database automatically.</p>
-        </div>
-      </div>
+await sql.transaction([
+  ...STAFF.map(
+    (e) =&gt; sql`
+      INSERT INTO employees (id, name, kind, key_holder, max_shifts_per_week)
+      VALUES (${e.id}, ${e.name}, ${e.kind}, ${e.keyHolder}, ${e.maxShiftsPerWeek})
+      ON CONFLICT (id) DO UPDATE SET
+        name = EXCLUDED.name, kind = EXCLUDED.kind,
+        key_holder = EXCLUDED.key_holder, max_shifts_per_week = EXCLUDED.max_shifts_per_week`,
+  ),
+  sql`DELETE FROM unavailability`,
+  ...UNAVAILABILITY.map(
+    (u) =&gt; sql`
+      INSERT INTO unavailability (employee_id, day, shifts)
+      VALUES (${u.employeeId}, ${u.day}, ${u.shifts ?? null})`,
+  ),
+])
 
-      <div class="section">
-        <h2>Setting Up the AI Gateway</h2>
-        <div class="section-content">
-          <div class="step">Step 19: Get your AI Gateway API key</div>
-          <p>Go to your Vercel dashboard &rarr; AI Gateway &rarr; API Keys. Create a new key.</p>
-
-          <div class="step">Step 20: Add the API key to your project</div>
-          <p>In your Vercel project settings, go to Environment Variables and add:</p>
-<pre><code>AI_GATEWAY_API_KEY=your_key_here</code></pre>
-          <p>For local development, pull the environment variables:</p>
-<pre><code>vercel env pull .env.local</code></pre>
-        </div>
-      </div>
-
-      <div class="section">
-        <h2>What We've Done</h2>
-        <div class="section-content">
-          <div class="step">Step 21: Verify your setup</div>
-          <p>You now have:</p>
-          <ul>
-            <li>A Next.js project with the AI SDK, Zod, and Neon driver installed</li>
-            <li>A GitHub repository backing up every change</li>
-            <li>A Vercel deployment that auto-publishes on every push</li>
-            <li>A Neon database ready to store schedule data</li>
-            <li>An AI Gateway API key for model access</li>
-          </ul>
-          <p>The scaffolding is up. Now let's build the foundation.</p>
+console.log(`Loaded ${STAFF.length} employees and ${UNAVAILABILITY.length} standing constraints.`)</code></pre>
+          <p>Every insert runs inside one transaction, and each employee upsert replaces the row, so running the script twice leaves the same data.</p>
         </div>
       </div>
 
     </main>
     <nav class="bottom-nav">
-      <a href="part2.html">&larr; How Agents Think</a>
-      <a href="part4.html">The Foundation &rarr;</a>
+      <a href="part2.html">&larr; Previous</a>
+      <a href="part4.html">Next: Data and Rules &rarr;</a>
     </nav>
     <footer>
-      Built with Next.js, Vercel AI SDK, Neon, and Vercel. Inspired by the real Fabulosa Books in San Francisco's Castro neighborhood.
+      Built with Next.js, the AI SDK, Neon, and Vercel. Fabulosa Books is an independent bookstore in San Francisco's Castro. The staff in this tutorial are fictional.
     </footer>
   </div>
 </body>
