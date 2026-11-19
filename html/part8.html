@@ -30,25 +30,24 @@
         <div class="section-content">
           <p>The tests so far use a scripted model. They prove the code around the model works: the rules, the tools, the approval gate, the subagent wiring. They can't prove that a real model, given "Schedule next week," produces a legal week. Evals do that. An eval runs the real agent against the real model on a fixed scenario and grades the result with code.</p>
           <p>Evals cost money and give a slightly different run each time, so they stay out of <code>npm test</code>.</p>
-          <div class="step">Step 34: Create vitest.evals.config.ts</div>
+          <div class="step">Step 35: Create vitest.evals.config.ts</div>
 <pre><code class="language-ts" data-source="vitest.evals.config.ts">import { existsSync } from 'node:fs'
-import { defineConfig, mergeConfig } from 'vitest/config'
+import { defineConfig } from 'vitest/config'
 import base from './vitest.config'
 
 // Evals call the real model through the AI Gateway. `vercel env pull .env.local`
 // writes the credentials this loads.
 if (existsSync('.env.local')) process.loadEnvFile('.env.local')
 
-export default mergeConfig(
-  base,
-  defineConfig({
-    test: {
-      include: ['evals/**/*.eval.ts'],
-      testTimeout: 180_000,
-    },
-  }),
-)</code></pre>
-          <div class="step">Step 35: Create evals/scheduler.eval.ts</div>
+// Not mergeConfig: it would add the unit tests' include pattern to this one.
+export default defineConfig({
+  resolve: base.resolve,
+  test: {
+    include: ['evals/**/*.eval.ts'],
+    testTimeout: 180_000,
+  },
+})</code></pre>
+          <div class="step">Step 36: Create evals/scheduler.eval.ts</div>
 <pre><code class="language-ts" data-source="evals/scheduler.eval.ts">// Evals run the real agent against the real model, so they cost money.
 // They stay out of `npm test`. Run them with `npm run eval` after `vercel env pull`.
 import { describe, expect, it } from 'vitest'
