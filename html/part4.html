@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Part 4: The Foundation &mdash; Data and Database</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Part 4: Data and Rules</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;600;700;900&display=swap" rel="stylesheet">
@@ -21,404 +21,570 @@
     </nav>
     <header>
       <div class="part-label">Part 4</div>
-      <h1>The Foundation &mdash; Data and Database</h1>
+      <h1>Data and Rules</h1>
     </header>
     <main id="main">
 
       <div class="section">
-        <h2>The Plan</h2>
+        <h2>Types</h2>
         <div class="section-content">
-          <p>Before we build agents, we need the foundation they'll work with: the data model, the database, the API, and the basic schedule UI. This is the "non-AI" part of the app&mdash;the solid ground the agents will stand on.</p>
-        </div>
-      </div>
-
-      <div class="section">
-        <h2>Defining the Data</h2>
-        <div class="section-content">
-          <div class="step">Step 22: Create the TypeScript types</div>
-          <p>Create a <code>types</code> folder in your project root with an <code>index.ts</code> file:</p>
-<pre><code>// types/index.ts
+          <div class="step">Step 11: Create lib/types.ts</div>
+<pre><code class="language-ts" data-source="lib/types.ts">export type Day = 0 | 1 | 2 | 3 | 4 | 5 | 6 // 0 = Sunday
+export type ShiftType = 'opening' | 'mid' | 'closing'
 
 export interface Employee {
-  id: number
+  id: string
   name: string
-  is_on_call: number
+  kind: 'regular' | 'on-call'
+  keyHolder: boolean
+  maxShiftsPerWeek: number
 }
 
-export interface ScheduleEntry {
-  id: number
-  day_of_week: number
-  shift_type: string
-  employee_name: string | null
-  week_start_date: string
+// A standing constraint: "Theo can't work Sundays."
+// No `shifts` means the whole day.
+export interface Unavailability {
+  employeeId: string
+  day: Day
+  shifts?: ShiftType[]
 }
 
-export interface ShiftSlot {
-  dayOfWeek: number
-  shiftType: string
-  employeeName: string | null
+// A one-off request for a specific date.
+export interface TimeOff {
+  employeeId: string
+  date: string // YYYY-MM-DD
+  reason?: string
+}
+
+export interface Assignment {
+  day: Day
+  shift: ShiftType
+  employeeId: string
+}
+
+export interface Schedule {
+  weekStart: string // YYYY-MM-DD, always a Sunday
+  assignments: Assignment[]
 }</code></pre>
-          <p>An <code>Employee</code> has an id, a name, and a flag for whether they're on-call. A <code>ScheduleEntry</code> records who's working which shift on which day of which week. <code>string | null</code> means the employee name can be empty&mdash;because sometimes a shift hasn't been assigned yet.</p>
-          <div class="image-placeholder">Diagram showing the relationship between the three types &mdash; Employee feeds into ScheduleEntry (via employee_name), ShiftSlot is a simplified view for the UI</div>
+          <p>Days are numbers, 0 for Sunday through 6 for Saturday, matching JavaScript's <code>getDay()</code> and Postgres's <code>DOW</code>. Employees have short ids such as <code>"rosa"</code>; the model writes those ids into schedules, and short ids are hard to get wrong.</p>
+          <p>Availability comes in two forms. <code>Unavailability</code> repeats every week ("Theo can't work Sundays"). <code>TimeOff</code> is a single date ("Priya has a dentist appointment on the 25th").</p>
         </div>
       </div>
 
       <div class="section">
-        <h2>The Utility Belt</h2>
+        <h2>Hours and shifts in code</h2>
         <div class="section-content">
-          <div class="step">Step 23: Create helper functions</div>
-          <p>Create <code>lib/utils.ts</code>:</p>
-<pre><code>// lib/utils.ts
+          <div class="step">Step 12: Create lib/store.ts</div>
+<pre><code class="language-ts" data-source="lib/store.ts">import type { Day, ShiftType } from './types'
 
-export const DAYS_OF_WEEK = [
-  'Sunday', 'Monday', 'Tuesday', 'Wednesday',
-  'Thursday', 'Friday', 'Saturday'
-]
+export const STORE_TIME_ZONE = 'America/Los_Angeles'
 
-export const SHIFTS = [
-  { type: 'opening', label: 'Opening', start: '10am', end: '4pm' },
-  { type: 'mid', label: 'Mid', start: '12pm', end: '6pm' },
-  { type: 'closing', label: 'Closing', start: '2pm', end: '8pm' },
-]
+export const DAY_NAMES = [
+  'Sunday',
+  'Monday',
+  'Tuesday',
+  'Wednesday',
+  'Thursday',
+  'Friday',
+  'Saturday',
+] as const
 
-export const SHIFTS_SATURDAY = [
-  { type: 'opening', label: 'Opening', start: '10am', end: '4pm' },
-  { type: 'mid', label: 'Mid', start: '12pm', end: '6pm' },
-  { type: 'closing', label: 'Closing', start: '2pm', end: '9pm' },
-]
+export const DAYS: Day[] = [0, 1, 2, 3, 4, 5, 6]
+export const SHIFT_TYPES: ShiftType[] = ['opening', 'mid', 'closing']
 
-export function getShiftsForDay(dayOfWeek: number) {
-  return dayOfWeek === 6 ? SHIFTS_SATURDAY : SHIFTS
+// Store hours: 10–8 Sunday through Thursday, 10–9 Friday, 10–10 Saturday.
+// Every shift is six hours. Closing ends when the store closes.
+export interface ShiftTimes {
+  start: number // hour, 24-hour clock
+  end: number
 }
 
-export function getWeekStartDate(date?: Date): string {
-  const d = date ? new Date(date) : new Date()
-  const day = d.getDay()
-  const diff = d.getDate() - day
-  const weekStart = new Date(d.setDate(diff))
-  return weekStart.toISOString().split('T')[0]
-}
-
-export function getDateFromDayOfWeek(
-  weekStart: string,
-  dayOfWeek: number
-): Date {
-  const date = new Date(weekStart)
-  date.setDate(date.getDate() + dayOfWeek)
-  return date
-}
-
-export function formatDate(date: Date): string {
-  return date.toLocaleDateString('en-US', {
-    month: 'short',
-    day: 'numeric',
-  })
-}</code></pre>
-          <p>Nothing dramatic&mdash;just useful tools. <code>getWeekStartDate</code> figures out what Sunday starts the current week. <code>getShiftsForDay</code> returns the right shift times, accounting for Saturday's later closing.</p>
-        </div>
-      </div>
-
-      <div class="section">
-        <h2>The Database Layer</h2>
-        <div class="section-content">
-          <div class="step">Step 24: Build the database module</div>
-          <p>This is the longest file in the project, but it's straightforward. Create <code>lib/db.ts</code>. It has two halves: one for Neon (production) and one for local SQLite (development). The app automatically uses the right one based on whether <code>DATABASE_URL</code> exists.</p>
-<pre><code>// lib/db.ts
-
-import { neon } from '@neondatabase/serverless'
-
-// ---- Neon (production) helpers ----
-
-function getSQL() {
-  const url = process.env.DATABASE_URL
-  if (!url) throw new Error('DATABASE_URL is not set')
-  return neon(url)
-}
-
-async function initializeNeonSchema() {
-  const sql = getSQL()
-
-  await sql`
-    CREATE TABLE IF NOT EXISTS employees (
-      id SERIAL PRIMARY KEY,
-      name TEXT NOT NULL UNIQUE,
-      is_on_call BOOLEAN DEFAULT false,
-      created_at TIMESTAMPTZ DEFAULT NOW()
-    )
-  `
-
-  await sql`
-    CREATE TABLE IF NOT EXISTS schedule (
-      id SERIAL PRIMARY KEY,
-      day_of_week INTEGER NOT NULL,
-      shift_type TEXT NOT NULL,
-      employee_name TEXT,
-      week_start_date TEXT NOT NULL,
-      created_at TIMESTAMPTZ DEFAULT NOW(),
-      updated_at TIMESTAMPTZ DEFAULT NOW(),
-      UNIQUE(week_start_date, day_of_week, shift_type)
-    )
-  `
-
-  // Seed employees if table is empty
-  const existing = await sql`SELECT count(*) as cnt FROM employees`
-  if (Number(existing[0].cnt) === 0) {
-    const employees = [
-      { name: 'Alvin', isOnCall: false },
-      { name: 'Melissa', isOnCall: false },
-      { name: 'Marcus', isOnCall: false },
-      { name: 'Dylan', isOnCall: false },
-      { name: 'Joel', isOnCall: false },
-      { name: 'Billy', isOnCall: false },
-      { name: 'Johnny Ray', isOnCall: true },
-      { name: 'Carly', isOnCall: true },
-    ]
-    for (const emp of employees) {
-      await sql`
-        INSERT INTO employees (name, is_on_call)
-        VALUES (${emp.name}, ${emp.isOnCall})
-        ON CONFLICT (name) DO NOTHING
-      `
+export function shiftTimes(day: Day, shift: ShiftType): ShiftTimes {
+  switch (shift) {
+    case 'opening':
+      return { start: 10, end: 16 }
+    case 'mid':
+      return { start: 12, end: 18 }
+    case 'closing': {
+      const close = day === 6 ? 22 : day === 5 ? 21 : 20
+      return { start: close - 6, end: close }
     }
   }
+}
+
+// Opening and closing need someone with keys.
+export function needsKeyHolder(shift: ShiftType): boolean {
+  return shift !== 'mid'
+}
+
+export function formatHour(hour: number): string {
+  const suffix = hour &gt;= 12 ? 'pm' : 'am'
+  const h = hour % 12 === 0 ? 12 : hour % 12
+  return `${h}${suffix}`
 }</code></pre>
-          <p>That <code>UNIQUE</code> constraint on the schedule table is important&mdash;it means you can't accidentally assign two people to the same shift. The database itself enforces the rules.</p>
-
-          <div class="step">Step 25: Add the local development database</div>
-          <p>Below the Neon code in <code>lib/db.ts</code>, add the SQLite fallback for local development:</p>
-<pre><code>// ---- sql.js (local dev) helpers ----
-
-import initSqlJs, { Database as SqlJsDatabase } from 'sql.js'
-import fs from 'fs'
-import path from 'path'
-
-let localDb: SqlJsDatabase | null = null
-
-const getDbPath = () => {
-  const dbDir = path.join(process.cwd(), 'data')
-  const dbFile = path.join(dbDir, 'schedule.db.json')
-  return { dbDir, dbFile }
-}
-
-function saveLocalDb() {
-  if (!localDb) return
-  const { dbDir, dbFile } = getDbPath()
-  if (!fs.existsSync(dbDir)) {
-    fs.mkdirSync(dbDir, { recursive: true })
-  }
-  const data = localDb.export()
-  const buffer = Buffer.from(data)
-  fs.writeFileSync(dbFile, JSON.stringify(Array.from(buffer)))
-}
-
-function initializeLocalSchema() {
-  if (!localDb) return
-
-  localDb.run(`
-    CREATE TABLE IF NOT EXISTS employees (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      name TEXT NOT NULL UNIQUE,
-      is_on_call BOOLEAN DEFAULT 0,
-      created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-    )
-  `)
-
-  localDb.run(`
-    CREATE TABLE IF NOT EXISTS schedule (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      day_of_week INTEGER NOT NULL,
-      shift_type TEXT NOT NULL,
-      employee_name TEXT,
-      week_start_date TEXT NOT NULL,
-      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-      updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-      UNIQUE(week_start_date, day_of_week, shift_type)
-    )
-  `)
-
-  // ... seed employees same as Neon version
-  saveLocalDb()
-}</code></pre>
-          <img src="images/dual-database.svg" alt="Dual-database architecture: SQLite for dev, Neon for production">
-
-          <div class="step">Step 26: Add the public API functions</div>
-          <p>These are the functions the rest of the app (and our agents) will use:</p>
-<pre><code>// ---- Public API ----
-
-export async function getAllEmployees() {
-  if (useNeon) {
-    await ensureNeonSchema()
-    const sql = getSQL()
-    const rows = await sql`SELECT id, name, is_on_call FROM employees ORDER BY name`
-    return rows.map((r: any) => ({
-      id: r.id, name: r.name, is_on_call: r.is_on_call,
-    }))
-  } else {
-    const db = await getLocalDb()
-    const result = db.exec('SELECT id, name, is_on_call FROM employees ORDER BY name')
-    if (result.length === 0) return []
-    return result[0].values.map((row: any) => ({
-      id: row[0], name: row[1], is_on_call: row[2],
-    }))
-  }
-}
-
-export async function getWeekSchedule(weekStartDate: string) { /* ... */ }
-export async function updateSchedule(weekStartDate, dayOfWeek, shiftType, employeeName) { /* ... */ }</code></pre>
+          <p>One function returns the hours for any day and shift, so the Friday and Saturday closings live in one place.</p>
         </div>
       </div>
 
       <div class="section">
-        <h2>The API Routes</h2>
+        <h2>Dates without the time-zone bug</h2>
         <div class="section-content">
-          <div class="step">Step 27: Create the employees API route</div>
-<pre><code>// app/api/employees/route.ts
+          <p>The earlier version of this app built date strings with <code>new Date().toISOString()</code>. That function returns the date in UTC. At 5pm on a Saturday in San Francisco it is already Sunday in UTC, so "this week" turned into next week every weekend evening.</p>
+          <div class="step">Step 13: Create lib/dates.ts</div>
+<pre><code class="language-ts" data-source="lib/dates.ts">import { STORE_TIME_ZONE } from './store'
+import type { Day } from './types'
 
-import { getAllEmployees } from '@/lib/db'
-import { NextResponse } from 'next/server'
+// Dates are plain YYYY-MM-DD strings. Arithmetic happens in UTC so the
+// server's own time zone never shifts a date by a day.
 
-export const dynamic = 'force-dynamic'
+// Today's date at the store, not on the server.
+export function storeToday(now: Date = new Date()): string {
+  return new Intl.DateTimeFormat('en-CA', {
+    timeZone: STORE_TIME_ZONE,
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).format(now)
+}
 
-export async function GET() {
-  try {
-    const employees = await getAllEmployees()
-    return NextResponse.json(
-      employees.map((emp: any) => ({
-        ...emp,
-        is_on_call: Boolean(emp.is_on_call),
+function toUTC(date: string): Date {
+  const [y, m, d] = date.split('-').map(Number)
+  return new Date(Date.UTC(y, m - 1, d))
+}
+
+function fromUTC(date: Date): string {
+  return date.toISOString().slice(0, 10)
+}
+
+export function addDays(date: string, days: number): string {
+  const d = toUTC(date)
+  d.setUTCDate(d.getUTCDate() + days)
+  return fromUTC(d)
+}
+
+export function dayOfWeek(date: string): Day {
+  return toUTC(date).getUTCDay() as Day
+}
+
+// The Sunday on or before `date`.
+export function weekStartFor(date: string): string {
+  return addDays(date, -dayOfWeek(date))
+}
+
+export function isWeekStart(date: string): boolean {
+  return /^\d{4}-\d{2}-\d{2}$/.test(date) &amp;&amp; dayOfWeek(date) === 0
+}</code></pre>
+          <p><code>storeToday</code> asks for the date in the store's time zone. Everything else works on plain <code>YYYY-MM-DD</code> strings and does its arithmetic in UTC, where no day is 23 or 25 hours long. <code>fromUTC</code> still calls <code>toISOString</code>, but only on a date that is already midnight UTC, so the result is the date you meant.</p>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2>The staff</h2>
+        <div class="section-content">
+          <div class="step">Step 14: Create lib/seed.ts</div>
+<pre><code class="language-ts" data-source="lib/seed.ts">import type { Employee, Unavailability } from './types'
+
+// The staff are fictional. The real Fabulosa crew stays private.
+export const STAFF: Employee[] = [
+  { id: 'rosa', name: 'Rosa Alvarez', kind: 'regular', keyHolder: true, maxShiftsPerWeek: 5 },
+  { id: 'theo', name: 'Theo Park', kind: 'regular', keyHolder: true, maxShiftsPerWeek: 5 },
+  { id: 'june', name: 'June Okafor', kind: 'regular', keyHolder: true, maxShiftsPerWeek: 5 },
+  { id: 'priya', name: 'Priya Shah', kind: 'regular', keyHolder: true, maxShiftsPerWeek: 4 },
+  { id: 'desmond', name: 'Desmond Reyes', kind: 'regular', keyHolder: false, maxShiftsPerWeek: 5 },
+  { id: 'kenji', name: 'Kenji Ito', kind: 'regular', keyHolder: false, maxShiftsPerWeek: 4 },
+  { id: 'mara', name: 'Mara Lindqvist', kind: 'on-call', keyHolder: false, maxShiftsPerWeek: 2 },
+  { id: 'felix', name: 'Felix Moreau', kind: 'on-call', keyHolder: true, maxShiftsPerWeek: 2 },
+]
+
+export const UNAVAILABILITY: Unavailability[] = [
+  { employeeId: 'theo', day: 0 }, // Sundays off
+  { employeeId: 'priya', day: 4 }, // Thursday class
+  { employeeId: 'june', day: 2, shifts: ['closing'] }, // Tuesday evenings
+  { employeeId: 'desmond', day: 1 },
+  { employeeId: 'kenji', day: 5, shifts: ['mid', 'closing'] },
+  { employeeId: 'kenji', day: 6, shifts: ['mid', 'closing'] },
+]</code></pre>
+          <p>Now run the setup script from Part 3:</p>
+<pre><code class="language-bash">npm run db:setup</code></pre>
+          <p>It prints <code>Loaded 8 employees and 6 standing constraints.</code></p>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2>The rules</h2>
+        <div class="section-content">
+          <p><code>validateSchedule</code> is the most important function in the app. The agent's whole job is to produce a week that this function accepts.</p>
+          <div class="step">Step 15: Create lib/rules.ts</div>
+<pre><code class="language-ts" data-source="lib/rules.ts">import { addDays } from './dates'
+import { DAY_NAMES, DAYS, needsKeyHolder, SHIFT_TYPES } from './store'
+import type { Day, Employee, Schedule, ShiftType, TimeOff, Unavailability } from './types'
+
+export type Rule =
+  | 'unfilled'
+  | 'double-filled'
+  | 'unknown-employee'
+  | 'double-booked'
+  | 'unavailable'
+  | 'time-off'
+  | 'over-max'
+  | 'needs-key-holder'
+
+export interface Violation {
+  rule: Rule
+  message: string
+  day?: Day
+  shift?: ShiftType
+  employeeId?: string
+}
+
+export interface RuleContext {
+  staff: Employee[]
+  unavailability: Unavailability[]
+  timeOff: TimeOff[]
+}
+
+// Every hard rule lives here, in code. The agent never decides whether a
+// schedule is legal; it proposes one and reads back the violations.
+export function validateSchedule(schedule: Schedule, ctx: RuleContext): Violation[] {
+  const violations: Violation[] = []
+  const staffById = new Map(ctx.staff.map((e) =&gt; [e.id, e]))
+
+  // Coverage: each of the 21 slots has exactly one person.
+  for (const day of DAYS) {
+    for (const shift of SHIFT_TYPES) {
+      const filled = schedule.assignments.filter((a) =&gt; a.day === day &amp;&amp; a.shift === shift)
+      const label = `${DAY_NAMES[day]} ${shift}`
+      if (filled.length === 0) {
+        violations.push({ rule: 'unfilled', day, shift, message: `${label} has no one assigned.` })
+      } else if (filled.length &gt; 1) {
+        violations.push({
+          rule: 'double-filled',
+          day,
+          shift,
+          message: `${label} has ${filled.length} people assigned; it needs exactly one.`,
+        })
+      }
+    }
+  }
+
+  const shiftsPerEmployee = new Map&lt;string, number&gt;()
+  const seenPerDay = new Set&lt;string&gt;()
+
+  for (const a of schedule.assignments) {
+    const label = `${DAY_NAMES[a.day]} ${a.shift}`
+    const employee = staffById.get(a.employeeId)
+    if (!employee) {
+      violations.push({
+        rule: 'unknown-employee',
+        ...a,
+        message: `${label}: no employee has the id "${a.employeeId}".`,
+      })
+      continue
+    }
+
+    const dayKey = `${a.employeeId}:${a.day}`
+    if (seenPerDay.has(dayKey)) {
+      violations.push({
+        rule: 'double-booked',
+        ...a,
+        message: `${employee.name} has more than one shift on ${DAY_NAMES[a.day]}.`,
+      })
+    }
+    seenPerDay.add(dayKey)
+
+    const blocked = ctx.unavailability.some(
+      (u) =&gt;
+        u.employeeId === a.employeeId &amp;&amp;
+        u.day === a.day &amp;&amp;
+        (!u.shifts || u.shifts.includes(a.shift)),
+    )
+    if (blocked) {
+      violations.push({
+        rule: 'unavailable',
+        ...a,
+        message: `${employee.name} is not available for ${label}.`,
+      })
+    }
+
+    const date = addDays(schedule.weekStart, a.day)
+    if (ctx.timeOff.some((t) =&gt; t.employeeId === a.employeeId &amp;&amp; t.date === date)) {
+      violations.push({
+        rule: 'time-off',
+        ...a,
+        message: `${employee.name} has the day off on ${date}.`,
+      })
+    }
+
+    if (needsKeyHolder(a.shift) &amp;&amp; !employee.keyHolder) {
+      violations.push({
+        rule: 'needs-key-holder',
+        ...a,
+        message: `${label} needs a key holder; ${employee.name} is not one.`,
+      })
+    }
+
+    shiftsPerEmployee.set(a.employeeId, (shiftsPerEmployee.get(a.employeeId) ?? 0) + 1)
+  }
+
+  for (const [employeeId, count] of shiftsPerEmployee) {
+    const employee = staffById.get(employeeId)
+    if (employee &amp;&amp; count &gt; employee.maxShiftsPerWeek) {
+      violations.push({
+        rule: 'over-max',
+        employeeId,
+        message: `${employee.name} has ${count} shifts; the limit is ${employee.maxShiftsPerWeek}.`,
+      })
+    }
+  }
+
+  return violations
+}</code></pre>
+          <p>Three choices here matter for the agent:</p>
+          <ul>
+            <li><strong>It reports every violation, not the first.</strong> The model can fix all of them in one pass instead of one per step.</li>
+            <li><strong>Each message is a sentence with names and days.</strong> The model reads the message, not the rule code. The code is for tests and the UI.</li>
+            <li><strong>It takes its data as an argument.</strong> The function never touches the database, so a test can call it with any staff and any week.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2>Test the rules</h2>
+        <div class="section-content">
+          <p>The tests start from one legal week and change one shift at a time. If a test breaks, you know which rule broke it.</p>
+          <div class="step">Step 16: Create tests/fixtures.ts</div>
+<pre><code class="language-ts" data-source="tests/fixtures.ts">import type { RuleContext } from '@/lib/rules'
+import { STAFF, UNAVAILABILITY } from '@/lib/seed'
+import type { Assignment, Day, Schedule, ShiftType } from '@/lib/types'
+
+// The week of Sunday 2026-11-22. A legal schedule under the seed staff.
+export const WEEK = '2026-11-22'
+
+const grid: Record&lt;Day, [string, string, string]&gt; = {
+  //  opening  mid        closing
+  0: ['rosa', 'kenji', 'june'],
+  1: ['theo', 'kenji', 'rosa'],
+  2: ['june', 'desmond', 'theo'],
+  3: ['priya', 'desmond', 'june'],
+  4: ['rosa', 'desmond', 'theo'],
+  5: ['june', 'mara', 'priya'],
+  6: ['rosa', 'desmond', 'felix'],
+}
+
+const SHIFTS: ShiftType[] = ['opening', 'mid', 'closing']
+
+export function validSchedule(): Schedule {
+  const assignments: Assignment[] = []
+  for (const [day, ids] of Object.entries(grid)) {
+    ids.forEach((employeeId, i) =&gt; {
+      assignments.push({ day: Number(day) as Day, shift: SHIFTS[i], employeeId })
+    })
+  }
+  return { weekStart: WEEK, assignments }
+}
+
+export function withAssignment(schedule: Schedule, day: Day, shift: ShiftType, employeeId: string): Schedule {
+  return {
+    ...schedule,
+    assignments: schedule.assignments.map((a) =&gt;
+      a.day === day &amp;&amp; a.shift === shift ? { ...a, employeeId } : a,
+    ),
+  }
+}
+
+export const ctx: RuleContext = { staff: STAFF, unavailability: UNAVAILABILITY, timeOff: [] }</code></pre>
+          <div class="step">Step 17: Create tests/rules.test.ts</div>
+          <p>The full file has a test for each rule. Two of them:</p>
+<pre><code class="language-ts" data-source="tests/rules.test.ts#rules-tests">it('flags a whole-day unavailability', () =&gt; {
+  // Theo doesn't work Sundays.
+  expect(rules(withAssignment(validSchedule(), 0, 'closing', 'theo'))).toContain('unavailable')
+})
+
+it('respects shift-specific unavailability', () =&gt; {
+  // June can open on Tuesday but can't close.
+  expect(rules(withAssignment(validSchedule(), 2, 'closing', 'june'))).toContain('unavailable')
+  expect(rules()).not.toContain('unavailable')
+})</code></pre>
+          <p>The second test checks both directions: June can't close on Tuesday, and the fixture, where she opens on Tuesday, passes. The full test file is in the <a href="https://github.com/highschoolsmokers/fabulosa-books/tree/main/01-multi-agent-orchestration/scheduling-agent/tests">tests folder of the app</a>.</p>
+<pre><code class="language-bash">npm test</code></pre>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2>The repository</h2>
+        <div class="section-content">
+          <p>The agent's tools read and write through an interface. The app passes in a Neon version; the tests and evals pass in one that keeps everything in memory.</p>
+          <div class="step">Step 18: Create lib/db/repository.ts</div>
+<pre><code class="language-ts" data-source="lib/db/repository.ts">import type { Employee, Schedule, TimeOff, Unavailability } from '../types'
+
+// The agent's tools talk to this interface, never to Postgres directly.
+// Tests and evals use the in-memory version; the app uses Neon.
+export interface Repository {
+  listStaff(): Promise&lt;Employee[]&gt;
+  listUnavailability(): Promise&lt;Unavailability[]&gt;
+  listTimeOff(from: string, to: string): Promise&lt;TimeOff[]&gt;
+  getSchedule(weekStart: string): Promise&lt;Schedule | null&gt;
+  listSchedulesBefore(weekStart: string, count: number): Promise&lt;Schedule[]&gt;
+  saveSchedule(schedule: Schedule): Promise&lt;void&gt;
+}
+
+export function createMemoryRepository(seed: {
+  staff: Employee[]
+  unavailability?: Unavailability[]
+  timeOff?: TimeOff[]
+  schedules?: Schedule[]
+}): Repository &amp; { saved: Schedule[] } {
+  const schedules = new Map((seed.schedules ?? []).map((s) =&gt; [s.weekStart, s]))
+  const saved: Schedule[] = []
+  return {
+    saved,
+    async listStaff() {
+      return seed.staff
+    },
+    async listUnavailability() {
+      return seed.unavailability ?? []
+    },
+    async listTimeOff(from, to) {
+      return (seed.timeOff ?? []).filter((t) =&gt; t.date &gt;= from &amp;&amp; t.date &lt;= to)
+    },
+    async getSchedule(weekStart) {
+      return schedules.get(weekStart) ?? null
+    },
+    async listSchedulesBefore(weekStart, count) {
+      return [...schedules.values()]
+        .filter((s) =&gt; s.weekStart &lt; weekStart)
+        .sort((a, b) =&gt; b.weekStart.localeCompare(a.weekStart))
+        .slice(0, count)
+    },
+    async saveSchedule(schedule) {
+      schedules.set(schedule.weekStart, schedule)
+      saved.push(schedule)
+    },
+  }
+}</code></pre>
+          <p><code>createMemoryRepository</code> is the version the tests use. It records every save in a <code>saved</code> array, so a test can check that nothing was written.</p>
+          <div class="step">Step 19: Create lib/db/neon.ts</div>
+<pre><code class="language-ts" data-source="lib/db/neon.ts">import { neon } from '@neondatabase/serverless'
+import type { Day, Employee, Schedule, ShiftType, TimeOff, Unavailability } from '../types'
+import type { Repository } from './repository'
+
+interface EmployeeRow {
+  id: string
+  name: string
+  kind: Employee['kind']
+  key_holder: boolean
+  max_shifts_per_week: number
+}
+
+interface AssignmentRow {
+  week_start: string
+  day: number
+  shift: ShiftType
+  employee_id: string
+}
+
+function groupByWeek(rows: AssignmentRow[]): Schedule[] {
+  const weeks = new Map&lt;string, Schedule&gt;()
+  for (const r of rows) {
+    const week = weeks.get(r.week_start) ?? { weekStart: r.week_start, assignments: [] }
+    week.assignments.push({ day: r.day as Day, shift: r.shift, employeeId: r.employee_id })
+    weeks.set(r.week_start, week)
+  }
+  return [...weeks.values()]
+}
+
+export function createNeonRepository(databaseUrl = process.env.DATABASE_URL): Repository {
+  if (!databaseUrl) throw new Error('DATABASE_URL is not set. Run `vercel env pull`.')
+  const sql = neon(databaseUrl)
+
+  return {
+    async listStaff() {
+      const rows = (await sql`
+        SELECT id, name, kind, key_holder, max_shifts_per_week
+        FROM employees ORDER BY name`) as EmployeeRow[]
+      return rows.map((r) =&gt; ({
+        id: r.id,
+        name: r.name,
+        kind: r.kind,
+        keyHolder: r.key_holder,
+        maxShiftsPerWeek: r.max_shifts_per_week,
       }))
-    )
-  } catch (error) {
-    console.error('Error fetching employees:', error)
-    return NextResponse.json({ error: 'Failed to fetch employees' }, { status: 500 })
+    },
+
+    async listUnavailability() {
+      const rows = (await sql`
+        SELECT employee_id, day, shifts FROM unavailability`) as {
+        employee_id: string
+        day: number
+        shifts: ShiftType[] | null
+      }[]
+      return rows.map(
+        (r): Unavailability =&gt; ({
+          employeeId: r.employee_id,
+          day: r.day as Day,
+          ...(r.shifts ? { shifts: r.shifts } : {}),
+        }),
+      )
+    },
+
+    async listTimeOff(from, to) {
+      // Cast DATE to text so the driver never turns it into a JS Date.
+      const rows = (await sql`
+        SELECT employee_id, date::text AS date, reason FROM time_off
+        WHERE date BETWEEN ${from} AND ${to}`) as {
+        employee_id: string
+        date: string
+        reason: string | null
+      }[]
+      return rows.map(
+        (r): TimeOff =&gt; ({
+          employeeId: r.employee_id,
+          date: r.date,
+          ...(r.reason ? { reason: r.reason } : {}),
+        }),
+      )
+    },
+
+    async getSchedule(weekStart) {
+      const rows = (await sql`
+        SELECT week_start::text AS week_start, day, shift, employee_id
+        FROM assignments WHERE week_start = ${weekStart}`) as AssignmentRow[]
+      return groupByWeek(rows)[0] ?? null
+    },
+
+    async listSchedulesBefore(weekStart, count) {
+      const rows = (await sql`
+        SELECT week_start::text AS week_start, day, shift, employee_id
+        FROM assignments
+        WHERE week_start &lt; ${weekStart}
+          AND week_start &gt;= ${weekStart}::date - ${count * 7}::int`) as AssignmentRow[]
+      return groupByWeek(rows).sort((a, b) =&gt; b.weekStart.localeCompare(a.weekStart))
+    },
+
+    // Replace the whole week in one transaction, so a failed save never
+    // leaves half a schedule behind.
+    async saveSchedule(schedule) {
+      await sql.transaction([
+        sql`DELETE FROM assignments WHERE week_start = ${schedule.weekStart}`,
+        ...schedule.assignments.map(
+          (a) =&gt; sql`
+            INSERT INTO assignments (week_start, day, shift, employee_id)
+            VALUES (${schedule.weekStart}, ${a.day}, ${a.shift}, ${a.employeeId})`,
+        ),
+      ])
+    },
   }
 }</code></pre>
-
-          <div class="step">Step 28: Create the schedule API route</div>
-<pre><code>// app/api/schedule/route.ts
-
-import { NextRequest, NextResponse } from 'next/server'
-import { getWeekSchedule, updateSchedule } from '@/lib/db'
-import { getWeekStartDate } from '@/lib/utils'
-
-export const dynamic = 'force-dynamic'
-
-export async function GET(request: NextRequest) {
-  try {
-    const searchParams = request.nextUrl.searchParams
-    const weekStart = searchParams.get('weekStart') || getWeekStartDate()
-    const schedule = await getWeekSchedule(weekStart)
-    return NextResponse.json({ schedule, weekStart })
-  } catch (error) {
-    return NextResponse.json({ error: 'Failed to fetch schedule' }, { status: 500 })
-  }
-}
-
-export async function PUT(request: NextRequest) {
-  try {
-    const body = await request.json()
-    const { weekStart, dayOfWeek, shiftType, employeeName } = body
-    await updateSchedule(weekStart, dayOfWeek, shiftType, employeeName || null)
-    return NextResponse.json({ success: true })
-  } catch (error) {
-    return NextResponse.json({ error: 'Failed to update schedule' }, { status: 500 })
-  }
-}</code></pre>
-          <div class="image-placeholder">API architecture: Browser makes GET/PUT requests &rarr; API Routes &rarr; Database Layer &rarr; Neon/SQLite</div>
-        </div>
-      </div>
-
-      <div class="section">
-        <h2>The Schedule UI</h2>
-        <div class="section-content">
-          <div class="step">Step 29: Build the ShiftCell component</div>
-          <p>Create <code>components/ShiftCell.tsx</code> &mdash; each cell in the schedule grid is its own component. When you click it, a dropdown shows all employees:</p>
-<pre><code>// components/ShiftCell.tsx
-'use client'
-
-import { Employee } from '@/types'
-
-interface ShiftCellProps {
-  dayOfWeek: number
-  shiftType: string
-  currentEmployee: string | null
-  employees: Employee[]
-  onUpdate: (dayOfWeek: number, shiftType: string, employeeName: string | null) => void
-  isSaturday: boolean
-}
-
-export default function ShiftCell({
-  dayOfWeek, shiftType, currentEmployee, employees, onUpdate, isSaturday,
-}: ShiftCellProps) {
-  const regularEmployees = employees.filter(e => !e.is_on_call)
-  const onCallEmployees = employees.filter(e => e.is_on_call)
-
-  return (
-    &lt;select
-      value={currentEmployee || ''}
-      onChange={(e) => onUpdate(dayOfWeek, shiftType, e.target.value || null)}
-      className={`w-full p-2 rounded text-sm font-medium cursor-pointer ...`}
-    &gt;
-      &lt;option value=""&gt;Unassigned&lt;/option&gt;
-      &lt;optgroup label="Regular"&gt;
-        {regularEmployees.map(emp => (
-          &lt;option key={emp.id} value={emp.name}&gt;{emp.name}&lt;/option&gt;
-        ))}
-      &lt;/optgroup&gt;
-      &lt;optgroup label="On-Call"&gt;
-        {onCallEmployees.map(emp => (
-          &lt;option key={emp.id} value={emp.name}&gt;{emp.name}&lt;/option&gt;
-        ))}
-      &lt;/optgroup&gt;
-    &lt;/select&gt;
-  )
-}</code></pre>
-
-          <div class="step">Step 30: Build the ScheduleGrid component</div>
-          <p>Create <code>components/ScheduleGrid.tsx</code> &mdash; the main grid with week navigation and shift cells for all 21 slots (3 shifts &times; 7 days).</p>
-
-          <div class="step">Step 31: Wire up the main page</div>
-          <p>Replace <code>app/page.tsx</code>:</p>
-<pre><code>// app/page.tsx
-import ScheduleGrid from '@/components/ScheduleGrid'
-
-export default function Home() {
-  return (
-    &lt;main className="min-h-screen bg-stone-50 p-8"&gt;
-      &lt;div className="max-w-7xl mx-auto"&gt;
-        &lt;header className="mb-8"&gt;
-          &lt;h1 className="text-3xl font-bold text-stone-800"&gt;Fabulosa Books&lt;/h1&gt;
-          &lt;p className="text-stone-500 mt-1"&gt;Employee Schedule&lt;/p&gt;
-        &lt;/header&gt;
-        &lt;ScheduleGrid /&gt;
-      &lt;/div&gt;
-    &lt;/main&gt;
-  )
-}</code></pre>
-
-          <div class="step">Step 32: Run and verify</div>
-<pre><code>npm run dev</code></pre>
-          <p>Open <code>http://localhost:3000</code>. You should see the schedule grid with week navigation and 21 "Unassigned" cells. Click any cell and pick an employee to verify the assignment works.</p>
-          <img src="images/schedule-grid-mockup.svg" alt="The schedule grid UI with week navigation and shift assignments">
-        </div>
-      </div>
-
-      <div class="section">
-        <h2>The Turning Point</h2>
-        <div class="section-content">
-          <p>The schedule app works. You can click each cell, pick an employee, and build a week's schedule one shift at a time. Push it to GitHub and Vercel deploys it automatically.</p>
-          <p>But right now, filling it is manual. Twenty-one cells, twenty-one clicks, twenty-one decisions. Alvin still has to do all the thinking: Who's available? Is this fair? Is the store covered?</p>
-          <p>Let's teach the app to think.</p>
+          <p>Two details: the queries cast <code>DATE</code> columns to text, so the driver returns <code>"2026-11-22"</code> and never a JavaScript <code>Date</code> in the server's time zone; and <code>saveSchedule</code> replaces the week inside one transaction, so a failed save never leaves half a week behind.</p>
         </div>
       </div>
 
     </main>
     <nav class="bottom-nav">
-      <a href="part3.html">&larr; Setting Up Shop</a>
-      <a href="part5.html">Your First Agent &rarr;</a>
+      <a href="part3.html">&larr; Previous</a>
+      <a href="part5.html">Next: The Scheduling Agent &rarr;</a>
     </nav>
     <footer>
-      Built with Next.js, Vercel AI SDK, Neon, and Vercel. Inspired by the real Fabulosa Books in San Francisco's Castro neighborhood.
+      Built with Next.js, the AI SDK, Neon, and Vercel. Fabulosa Books is an independent bookstore in San Francisco's Castro. The staff in this tutorial are fictional.
     </footer>
   </div>
 </body>

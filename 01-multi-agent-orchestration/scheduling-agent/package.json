@@ -1,0 +1,37 @@
+{
+  "name": "fabulosa-scheduling-agent",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "db:setup": "node --env-file-if-exists=.env.local scripts/setup-db.ts",
+    "eval": "vitest run --config vitest.evals.config.ts",
+    "snippets": "node scripts/snippets.ts",
+    "snippets:check": "node scripts/snippets.ts --check"
+  },
+  "dependencies": {
+    "@ai-sdk/react": "^4.0.181",
+    "@neondatabase/serverless": "^1.2.1",
+    "ai": "^7.0.177",
+    "next": "^16.4.6",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@ai-sdk/provider": "^4.0.39",
+    "@types/node": "^26.6.6",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "typescript": "^7.0.2",
+    "vitest": "^5.1.1"
+  }
+}
