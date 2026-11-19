@@ -6,18 +6,18 @@ A series of tutorials built around **Fabulosa Books**, an LGBTQIA+ bookstore in 
 
 ### 01 — Multi-Agent Orchestration
 
-Build an AI-powered employee scheduling system using multiple coordinated agents. Learn how to design, build, and orchestrate specialized AI agents with the Vercel AI SDK.
+Build a scheduling agent for the store's weekly staff schedule: one agent with seven tools, a fairness subagent, and rules in code that the model can't break. The tutorial covers agent design, safe writes with human approval, testing an agent with a scripted model, and evals.
 
-**Stack:** Next.js, Vercel AI SDK, Neon (serverless Postgres), Vercel
+**Stack:** Next.js 16, AI SDK 7, Neon (serverless Postgres), Vercel AI Gateway
 
-[Start the tutorial →](01-multi-agent-orchestration/tutorial.md)
+[Start the tutorial →](01-multi-agent-orchestration/tutorial.md) · [HTML version](html/index.html) · [The app](01-multi-agent-orchestration/scheduling-agent/)
 
 ## Deployment
 
-The runnable scheduler app under `01-multi-agent-orchestration/fabulosa-scheduler/` is deployed to the Vercel project **`fabulosa-scheduler`**. Vercel can't infer this layout from any file in the repo — when re-importing the project (or fixing a misconfigured one), set the project's **Root Directory** to:
+The app under `01-multi-agent-orchestration/scheduling-agent/` deploys to the Vercel project **`fabulosa-scheduler`**. Vercel can't infer this layout from any file in the repo. When re-importing the project, or fixing a misconfigured one, set the project's **Root Directory** to:
 
 ```
-01-multi-agent-orchestration/fabulosa-scheduler
+01-multi-agent-orchestration/scheduling-agent
 ```
 
 Without this, `next build` runs at the repo root and fails with `Couldn't find any 'pages' or 'app' directory`.
