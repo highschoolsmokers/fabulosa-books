@@ -28,7 +28,7 @@
       <div class="section">
         <h2>Types</h2>
         <div class="section-content">
-          <div class="step">Step 11: Create lib/types.ts</div>
+          <div class="step">Step 12: Create lib/types.ts</div>
 <pre><code class="language-ts" data-source="lib/types.ts">export type Day = 0 | 1 | 2 | 3 | 4 | 5 | 6 // 0 = Sunday
 export type ShiftType = 'opening' | 'mid' | 'closing'
 
@@ -73,7 +73,7 @@ export interface Schedule {
       <div class="section">
         <h2>Hours and shifts in code</h2>
         <div class="section-content">
-          <div class="step">Step 12: Create lib/store.ts</div>
+          <div class="step">Step 13: Create lib/store.ts</div>
 <pre><code class="language-ts" data-source="lib/store.ts">import type { Day, ShiftType } from './types'
 
 export const STORE_TIME_ZONE = 'America/Los_Angeles'
@@ -129,7 +129,7 @@ export function formatHour(hour: number): string {
         <h2>Dates without the time-zone bug</h2>
         <div class="section-content">
           <p>The earlier version of this app built date strings with <code>new Date().toISOString()</code>. That function returns the date in UTC. At 5pm on a Saturday in San Francisco it is already Sunday in UTC, so "this week" turned into next week every weekend evening.</p>
-          <div class="step">Step 13: Create lib/dates.ts</div>
+          <div class="step">Step 14: Create lib/dates.ts</div>
 <pre><code class="language-ts" data-source="lib/dates.ts">import { STORE_TIME_ZONE } from './store'
 import type { Day } from './types'
 
@@ -180,7 +180,7 @@ export function isWeekStart(date: string): boolean {
       <div class="section">
         <h2>The staff</h2>
         <div class="section-content">
-          <div class="step">Step 14: Create lib/seed.ts</div>
+          <div class="step">Step 15: Create lib/seed.ts</div>
 <pre><code class="language-ts" data-source="lib/seed.ts">import type { Employee, Unavailability } from './types'
 
 // The staff are fictional. The real Fabulosa crew stays private.
@@ -213,7 +213,7 @@ export const UNAVAILABILITY: Unavailability[] = [
         <h2>The rules</h2>
         <div class="section-content">
           <p><code>validateSchedule</code> is the most important function in the app. The agent's whole job is to produce a week that this function accepts.</p>
-          <div class="step">Step 15: Create lib/rules.ts</div>
+          <div class="step">Step 16: Create lib/rules.ts</div>
 <pre><code class="language-ts" data-source="lib/rules.ts">import { addDays } from './dates'
 import { DAY_NAMES, DAYS, needsKeyHolder, SHIFT_TYPES } from './store'
 import type { Day, Employee, Schedule, ShiftType, TimeOff, Unavailability } from './types'
@@ -351,7 +351,7 @@ export function validateSchedule(schedule: Schedule, ctx: RuleContext): Violatio
         <h2>Test the rules</h2>
         <div class="section-content">
           <p>The tests start from one legal week and change one shift at a time. If a test breaks, you know which rule broke it.</p>
-          <div class="step">Step 16: Create tests/fixtures.ts</div>
+          <div class="step">Step 17: Create tests/fixtures.ts</div>
 <pre><code class="language-ts" data-source="tests/fixtures.ts">import type { RuleContext } from '@/lib/rules'
 import { STAFF, UNAVAILABILITY } from '@/lib/seed'
 import type { Assignment, Day, Schedule, ShiftType } from '@/lib/types'
@@ -392,7 +392,7 @@ export function withAssignment(schedule: Schedule, day: Day, shift: ShiftType, e
 }
 
 export const ctx: RuleContext = { staff: STAFF, unavailability: UNAVAILABILITY, timeOff: [] }</code></pre>
-          <div class="step">Step 17: Create tests/rules.test.ts</div>
+          <div class="step">Step 18: Create tests/rules.test.ts</div>
           <p>The full file has a test for each rule. Two of them:</p>
 <pre><code class="language-ts" data-source="tests/rules.test.ts#rules-tests">it('flags a whole-day unavailability', () =&gt; {
   // Theo doesn't work Sundays.
@@ -413,7 +413,7 @@ it('respects shift-specific unavailability', () =&gt; {
         <h2>The repository</h2>
         <div class="section-content">
           <p>The agent's tools read and write through an interface. The app passes in a Neon version; the tests and evals pass in one that keeps everything in memory.</p>
-          <div class="step">Step 18: Create lib/db/repository.ts</div>
+          <div class="step">Step 19: Create lib/db/repository.ts</div>
 <pre><code class="language-ts" data-source="lib/db/repository.ts">import type { Employee, Schedule, TimeOff, Unavailability } from '../types'
 
 // The agent's tools talk to this interface, never to Postgres directly.
@@ -462,7 +462,7 @@ export function createMemoryRepository(seed: {
   }
 }</code></pre>
           <p><code>createMemoryRepository</code> is the version the tests use. It records every save in a <code>saved</code> array, so a test can check that nothing was written.</p>
-          <div class="step">Step 19: Create lib/db/neon.ts</div>
+          <div class="step">Step 20: Create lib/db/neon.ts</div>
 <pre><code class="language-ts" data-source="lib/db/neon.ts">import { neon } from '@neondatabase/serverless'
 import type { Day, Employee, Schedule, ShiftType, TimeOff, Unavailability } from '../types'
 import type { Repository } from './repository'
