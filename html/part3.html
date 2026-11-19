@@ -167,13 +167,15 @@ vercel link</code></pre>
           <div class="step">Step 8: Pull the environment</div>
 <pre><code class="language-bash">vercel env pull .env.local</code></pre>
           <p>This writes <code>DATABASE_URL</code> and <code>VERCEL_OIDC_TOKEN</code> to <code>.env.local</code>. The AI SDK uses the OIDC token to reach the AI Gateway, so the app needs no Anthropic key. The token expires after about twelve hours; run <code>vercel env pull</code> again when model calls start failing with an authentication error. Deployed on Vercel, the app gets a fresh token on every request.</p>
+          <div class="step">Step 9: Add a card to the AI Gateway</div>
+          <p>The AI Gateway serves requests only after your Vercel team has a credit card on file. Without one, every model call fails with HTTP 403 and the error type <code>customer_verification_required</code>. In the Vercel dashboard, open your team's <strong>AI Gateway</strong> page and add a card. Adding one also unlocks the gateway's free credits.</p>
         </div>
       </div>
 
       <div class="section">
         <h2>Create the tables</h2>
         <div class="section-content">
-          <div class="step">Step 9: Create lib/db/schema.sql</div>
+          <div class="step">Step 10: Create lib/db/schema.sql</div>
 <pre><code class="language-sql" data-source="lib/db/schema.sql#schema">CREATE TABLE IF NOT EXISTS employees (
   id                  TEXT PRIMARY KEY,
   name                TEXT NOT NULL,
@@ -203,7 +205,7 @@ CREATE TABLE IF NOT EXISTS assignments (
   PRIMARY KEY (week_start, day, shift)
 );</code></pre>
           <p>The schema enforces what it can. <code>CHECK</code> constraints reject a week start that isn't a Sunday and a shift that doesn't exist. The primary key on <code>assignments</code> allows one person per shift. Rules that depend on more than one row, such as weekly limits and availability, live in <code>validateSchedule</code> in Part 4.</p>
-          <div class="step">Step 10: Create scripts/setup-db.ts</div>
+          <div class="step">Step 11: Create scripts/setup-db.ts</div>
           <p>This script runs the schema and loads the staff. It imports <code>lib/seed.ts</code>, which you'll create in Part 4, so run it at the end of that part.</p>
 <pre><code class="language-ts" data-source="scripts/setup-db.ts">// Create the tables and load the fictional staff.
 // Run with: npm run db:setup  (reads DATABASE_URL from .env.local)
