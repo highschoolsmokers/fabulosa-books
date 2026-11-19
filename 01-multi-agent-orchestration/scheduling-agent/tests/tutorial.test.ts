@@ -1,32 +1,36 @@
 import { readFile } from 'node:fs/promises'
 import path from 'node:path'
 import { describe, expect, it } from 'vitest'
-import { render, tutorialPages } from '../scripts/snippets'
+import { TUTORIAL_MD, tutorialFiles } from '../scripts/snippets'
 
-// The tutorial's code comes from this app. If either changes without the
-// other, this test fails. Fix it with `npm run snippets`.
-const pages = await tutorialPages()
+// The tutorial's code comes from this app, in both the HTML pages and
+// tutorial.md. If either changes without the other, this test fails.
+// Fix it with `npm run snippets`.
+const files = await tutorialFiles()
 
 describe('tutorial code blocks', () => {
-  it('finds the tutorial pages', () => {
-    expect(pages.length).toBeGreaterThan(0)
+  it('finds the HTML pages and the Markdown copy', () => {
+    expect(files.length).toBeGreaterThan(1)
+    expect(files.map((f) => f.file)).toContain(TUTORIAL_MD)
   })
 
-  for (const page of pages) {
-    it(`${path.basename(page)} matches the app source`, async () => {
-      const html = await readFile(page, 'utf8')
-      const { html: expected } = await render(html)
-      expect(html).toBe(expected)
+  for (const { file, render } of files) {
+    it(`${path.basename(file)} matches the app source`, async () => {
+      const text = await readFile(file, 'utf8')
+      const { html: expected } = await render(text)
+      expect(text).toBe(expected)
     })
   }
 
-  it('sources every code block it shows from the app', async () => {
+  it('sources every TypeScript, TSX, and SQL block it shows', async () => {
     const unsourced: string[] = []
-    for (const page of pages) {
-      const html = await readFile(page, 'utf8')
-      for (const [block] of html.matchAll(/<pre><code(?![^>]*data-source)[^>]*class="language-(ts|tsx|sql)"[^>]*>/g)) {
-        unsourced.push(`${path.basename(page)}: ${block}`)
-      }
+    for (const { file } of files) {
+      const text = await readFile(file, 'utf8')
+      const blocks =
+        file === TUTORIAL_MD
+          ? text.matchAll(/(?<!-->)\n```(ts|tsx|sql)\n/g)
+          : text.matchAll(/<pre><code(?![^>]*data-source)[^>]*class="language-(ts|tsx|sql)"[^>]*>/g)
+      for (const [block] of blocks) unsourced.push(`${path.basename(file)}: ${block.trim()}`)
     }
     expect(unsourced).toEqual([])
   })

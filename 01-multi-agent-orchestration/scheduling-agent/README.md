@@ -22,8 +22,8 @@ npm run dev
 | `npm run typecheck` | `tsc --noEmit` |
 | `npm run eval` | Runs the real agent on four scenarios and grades each week with `validateSchedule`. Costs money; needs `.env.local`. |
 | `npm run db:setup` | Creates the tables and loads the staff. Safe to rerun. |
-| `npm run snippets` | Rewrites the tutorial's code blocks from this app's source. |
-| `npm run snippets:check` | Exits 1 if any tutorial block is out of date. |
+| `npm run snippets` | Rewrites the code blocks in the tutorial HTML and `tutorial.md` from this app's source. |
+| `npm run snippets:check` | Exits 1 if any block in either copy is out of date. |
 
 ## Layout
 
@@ -43,4 +43,4 @@ scripts/snippets.ts      tutorial code-block sync
 
 ## Tutorial code blocks
 
-Every TypeScript, TSX, and SQL block in the tutorial carries `data-source="path#region"`. `#region` selects the lines between `// #region name` and `// #endregion name`. `tests/tutorial.test.ts` fails when a page and the source disagree, or when a page shows code that has no source.
+Every TypeScript, TSX, and SQL block in the tutorial names its source. In the HTML pages the `<code>` element carries `data-source="path#region"`; in [`../tutorial.md`](../tutorial.md) a `<!-- source: path#region -->` comment sits on the line above the fence. `#region` selects the lines between `// #region name` and `// #endregion name`. `tests/tutorial.test.ts` fails when either copy and the source disagree, or when either shows code that has no source.

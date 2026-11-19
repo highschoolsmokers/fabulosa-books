@@ -61,10 +61,38 @@ export async function render(html: string): Promise<{ html: string; sources: str
   return { html: out, sources }
 }
 
+// The Markdown copy marks a sourced block with a comment on the line above:
+//   <!-- source: lib/rules.ts#validate -->
+//   ```ts
+//   ...
+//   ```
+export const TUTORIAL_MD = path.resolve(APP_ROOT, '../tutorial.md')
+const MD_BLOCK = /<!-- source: (\S+) -->\n```(\w*)\n[\s\S]*?\n```/g
+
+export async function renderMarkdown(md: string): Promise<{ html: string; sources: string[] }> {
+  const sources: string[] = []
+  const code = new Map<string, string>()
+  for (const [, source] of md.matchAll(MD_BLOCK)) {
+    sources.push(source)
+    code.set(source, await extract(source))
+  }
+  const out = md.replace(
+    MD_BLOCK,
+    (_m, source, lang) => `<!-- source: ${source} -->\n\`\`\`${lang}\n${code.get(source)}\n\`\`\``,
+  )
+  return { html: out, sources }
+}
+
+// Every file this script keeps in sync, with the renderer for its format.
+export async function tutorialFiles() {
+  const pages = (await tutorialPages()).map((file) => ({ file, render }))
+  return [...pages, { file: TUTORIAL_MD, render: renderMarkdown }]
+}
+
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const check = process.argv.includes('--check')
   let stale = 0
-  for (const page of await tutorialPages()) {
+  for (const { file: page, render } of await tutorialFiles()) {
     const html = await readFile(page, 'utf8')
     const { html: next, sources } = await render(html)
     if (next === html) continue
