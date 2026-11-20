@@ -2,7 +2,7 @@
 
 The reference app for the eight-part tutorial in [`../../html`](../../html/index.html). A store manager types "Schedule next week"; one scheduling agent proposes a week, reads back every rule it breaks, fixes them, asks a fairness subagent for a review, and waits for the manager's approval before it saves.
 
-Next.js 16, AI SDK 7, Neon Postgres, and the Vercel AI Gateway. The staff are fictional.
+Next.js 16, AI SDK 7, Neon Postgres, and the Vercel AI Gateway. The staff are the store's real crew, by first name; their availability is made up.
 
 ## Run it
 

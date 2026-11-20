@@ -1,4 +1,4 @@
-// Create the tables and load the fictional staff.
+// Create the tables and load the staff.
 // Run with: npm run db:setup  (reads DATABASE_URL from .env.local)
 import { readFile } from 'node:fs/promises'
 import { neon } from '@neondatabase/serverless'
