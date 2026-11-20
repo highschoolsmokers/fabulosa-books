@@ -41,7 +41,7 @@ export interface Employee {
   maxShiftsPerWeek: number
 }
 
-// A standing constraint: "Theo can't work Sundays."
+// A standing constraint: "Marcus can't work Sundays."
 // No `shifts` means the whole day.
 export interface Unavailability {
   employeeId: string
@@ -66,8 +66,8 @@ export interface Schedule {
   weekStart: string // YYYY-MM-DD, always a Sunday
   assignments: Assignment[]
 }</code></pre>
-          <p>Days are numbers, 0 for Sunday through 6 for Saturday, matching JavaScript's <code>getDay()</code> and Postgres's <code>DOW</code>. Employees have short ids such as <code>"rosa"</code>; the model writes those ids into schedules, and short ids are hard to get wrong.</p>
-          <p>Availability comes in two forms. <code>Unavailability</code> repeats every week ("Theo can't work Sundays"). <code>TimeOff</code> is a single date ("Priya has a dentist appointment on the 25th").</p>
+          <p>Days are numbers, 0 for Sunday through 6 for Saturday, matching JavaScript's <code>getDay()</code> and Postgres's <code>DOW</code>. Employees have short ids such as <code>"alvin"</code>; the model writes those ids into schedules, and short ids are hard to get wrong.</p>
+          <p>Availability comes in two forms. <code>Unavailability</code> repeats every week ("Marcus can't work Sundays"). <code>TimeOff</code> is a single date ("Joel has a dentist appointment on the 25th").</p>
         </div>
       </div>
 
@@ -184,25 +184,25 @@ export function isWeekStart(date: string): boolean {
           <div class="step">Create lib/seed.ts</div>
 <pre><code class="language-ts" data-source="lib/seed.ts">import type { Employee, Unavailability } from './types'
 
-// The staff are fictional. The real Fabulosa crew stays private.
+// The real Fabulosa crew, by first name. Availability and shift limits are examples.
 export const STAFF: Employee[] = [
-  { id: 'rosa', name: 'Rosa Alvarez', kind: 'regular', keyHolder: true, maxShiftsPerWeek: 5 },
-  { id: 'theo', name: 'Theo Park', kind: 'regular', keyHolder: true, maxShiftsPerWeek: 5 },
-  { id: 'june', name: 'June Okafor', kind: 'regular', keyHolder: true, maxShiftsPerWeek: 5 },
-  { id: 'priya', name: 'Priya Shah', kind: 'regular', keyHolder: true, maxShiftsPerWeek: 4 },
-  { id: 'desmond', name: 'Desmond Reyes', kind: 'regular', keyHolder: false, maxShiftsPerWeek: 5 },
-  { id: 'kenji', name: 'Kenji Ito', kind: 'regular', keyHolder: false, maxShiftsPerWeek: 4 },
-  { id: 'mara', name: 'Mara Lindqvist', kind: 'on-call', keyHolder: false, maxShiftsPerWeek: 2 },
-  { id: 'felix', name: 'Felix Moreau', kind: 'on-call', keyHolder: true, maxShiftsPerWeek: 2 },
+  { id: 'alvin', name: 'Alvin', kind: 'regular', keyHolder: true, maxShiftsPerWeek: 5 },
+  { id: 'marcus', name: 'Marcus', kind: 'regular', keyHolder: true, maxShiftsPerWeek: 5 },
+  { id: 'dylan', name: 'Dylan', kind: 'regular', keyHolder: true, maxShiftsPerWeek: 5 },
+  { id: 'joel', name: 'Joel', kind: 'regular', keyHolder: true, maxShiftsPerWeek: 4 },
+  { id: 'violet', name: 'Violet', kind: 'regular', keyHolder: false, maxShiftsPerWeek: 5 },
+  { id: 'johnny', name: 'Johnny', kind: 'regular', keyHolder: false, maxShiftsPerWeek: 4 },
+  { id: 'melissa', name: 'Melissa', kind: 'on-call', keyHolder: false, maxShiftsPerWeek: 2 },
+  { id: 'billy', name: 'Billy', kind: 'on-call', keyHolder: true, maxShiftsPerWeek: 2 },
 ]
 
 export const UNAVAILABILITY: Unavailability[] = [
-  { employeeId: 'theo', day: 0 }, // Sundays off
-  { employeeId: 'priya', day: 4 }, // Thursday class
-  { employeeId: 'june', day: 2, shifts: ['closing'] }, // Tuesday evenings
-  { employeeId: 'desmond', day: 1 },
-  { employeeId: 'kenji', day: 5, shifts: ['mid', 'closing'] },
-  { employeeId: 'kenji', day: 6, shifts: ['mid', 'closing'] },
+  { employeeId: 'marcus', day: 0 }, // Sundays off
+  { employeeId: 'joel', day: 4 }, // Thursday class
+  { employeeId: 'dylan', day: 2, shifts: ['closing'] }, // Tuesday evenings
+  { employeeId: 'violet', day: 1 },
+  { employeeId: 'johnny', day: 5, shifts: ['mid', 'closing'] },
+  { employeeId: 'johnny', day: 6, shifts: ['mid', 'closing'] },
 ]</code></pre>
           <p>Now run the setup script from Part 3:</p>
 <pre><code class="language-bash">npm run db:setup</code></pre>
@@ -362,13 +362,13 @@ export const WEEK = '2026-11-22'
 
 const grid: Record&lt;Day, [string, string, string]&gt; = {
   //  opening  mid        closing
-  0: ['rosa', 'kenji', 'june'],
-  1: ['theo', 'kenji', 'rosa'],
-  2: ['june', 'desmond', 'theo'],
-  3: ['priya', 'desmond', 'june'],
-  4: ['rosa', 'desmond', 'theo'],
-  5: ['june', 'mara', 'priya'],
-  6: ['rosa', 'desmond', 'felix'],
+  0: ['alvin', 'johnny', 'dylan'],
+  1: ['marcus', 'johnny', 'alvin'],
+  2: ['dylan', 'violet', 'marcus'],
+  3: ['joel', 'violet', 'dylan'],
+  4: ['alvin', 'violet', 'marcus'],
+  5: ['dylan', 'melissa', 'joel'],
+  6: ['alvin', 'violet', 'billy'],
 }
 
 const SHIFTS: ShiftType[] = ['opening', 'mid', 'closing']
@@ -396,16 +396,16 @@ export const ctx: RuleContext = { staff: STAFF, unavailability: UNAVAILABILITY, 
           <div class="step">Create tests/rules.test.ts</div>
           <p>The full file has a test for each rule. Two of them:</p>
 <pre><code class="language-ts" data-source="tests/rules.test.ts#rules-tests">it('flags a whole-day unavailability', () =&gt; {
-  // Theo doesn't work Sundays.
-  expect(rules(withAssignment(validSchedule(), 0, 'closing', 'theo'))).toContain('unavailable')
+  // Marcus doesn't work Sundays.
+  expect(rules(withAssignment(validSchedule(), 0, 'closing', 'marcus'))).toContain('unavailable')
 })
 
 it('respects shift-specific unavailability', () =&gt; {
-  // June can open on Tuesday but can't close.
-  expect(rules(withAssignment(validSchedule(), 2, 'closing', 'june'))).toContain('unavailable')
+  // Dylan can open on Tuesday but can't close.
+  expect(rules(withAssignment(validSchedule(), 2, 'closing', 'dylan'))).toContain('unavailable')
   expect(rules()).not.toContain('unavailable')
 })</code></pre>
-          <p>The second test checks both directions: June can't close on Tuesday, and the fixture, where she opens on Tuesday, passes. The full test file is in the <a href="https://github.com/highschoolsmokers/fabulosa-books/tree/main/01-multi-agent-orchestration/scheduling-agent/tests">tests folder of the app</a>.</p>
+          <p>The second test checks both directions: Dylan can't close on Tuesday, and the fixture, where Dylan opens on Tuesday, passes. The full test file is in the <a href="https://github.com/highschoolsmokers/fabulosa-books/tree/main/01-multi-agent-orchestration/scheduling-agent/tests">tests folder of the app</a>.</p>
 <pre><code class="language-bash">npm test</code></pre>
         </div>
       </div>
@@ -585,7 +585,7 @@ export function createNeonRepository(databaseUrl = process.env.DATABASE_URL): Re
       <a href="part5.html">Next: The Scheduling Agent &rarr;</a>
     </nav>
     <footer>
-      Built with Next.js, the AI SDK, Neon, and Vercel. Fabulosa Books is an independent bookstore in San Francisco's Castro. The staff in this tutorial are fictional.
+      Built with Next.js, the AI SDK, Neon, and Vercel. Fabulosa Books is an independent bookstore in San Francisco's Castro.
     </footer>
   </div>
 </body>

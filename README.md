@@ -12,6 +12,16 @@ Build a scheduling agent for the store's weekly staff schedule: one agent with s
 
 [Start the tutorial →](01-multi-agent-orchestration/tutorial.md) · [HTML version](html/index.html) · [The app](01-multi-agent-orchestration/scheduling-agent/)
 
+## Editing the tutorial
+
+`html/` is the source of truth. After editing it, rebuild the Markdown, Word and PDF copies:
+
+```
+scripts/build-docs.sh
+```
+
+`scripts/build-docs.sh --check` fails if `tutorial.md` is behind `html/`. The build needs `pandoc` and `weasyprint` (`brew install pandoc weasyprint`). The public copy on ws-gong.com picks up changes through that repo's `pnpm sync:tutorial`.
+
 ## Deployment
 
 The app under `01-multi-agent-orchestration/scheduling-agent/` deploys to the Vercel project **`fabulosa-scheduler`**. Vercel can't infer this layout from any file in the repo. When re-importing the project, or fixing a misconfigured one, set the project's **Root Directory** to:

@@ -32,7 +32,7 @@
           <p>The agent can read anything, but only one tool can change the database. A week goes through three checks before it saves:</p>
           <ol>
             <li><strong>A dry run.</strong> <code>proposeSchedule</code> runs the rules and returns the violations. It never writes.</li>
-            <li><strong>A person.</strong> <code>saveSchedule</code> needs Rosa's approval. The loop pauses, the chat shows the week, and the tool runs only if she clicks Save.</li>
+            <li><strong>A person.</strong> <code>saveSchedule</code> needs Alvin's approval. The loop pauses, the chat shows the week, and the tool runs only if Alvin clicks Save.</li>
             <li><strong>A second check at write time.</strong> <code>saveSchedule</code> runs the rules again on the input it receives. The model's earlier dry run proves nothing about the week it sends now, and someone may have asked for a day off in between.</li>
           </ol>
         </div>
@@ -104,7 +104,7 @@ toolApproval: { saveSchedule: 'user-approval' },</code></pre>
 })</code></pre>
           <p>The scripted model calls <code>saveSchedule</code> with a legal week. The run ends with an approval request, and the repository's <code>saved</code> list is still empty.</p>
           <div class="step">Create tests/tools.test.ts</div>
-          <p>These tests call the tools directly, the way <code>saveSchedule</code> runs after Rosa approves. The <code>run</code> helper unwraps a tool's result; a tool may stream its output, and these don't.</p>
+          <p>These tests call the tools directly, the way <code>saveSchedule</code> runs after Alvin approves. The <code>run</code> helper unwraps a tool's result; a tool may stream its output, and these don't.</p>
 <pre><code class="language-ts" data-source="tests/tools.test.ts">import type { ToolExecutionOptions } from 'ai'
 import { describe, expect, it } from 'vitest'
 import { createReadTools, createWriteTools } from '@/lib/agents/tools'
@@ -138,15 +138,15 @@ describe('saveSchedule', () =&gt; {
 
   it('refuses an invalid week even after approval', async () =&gt; {
     const { repo, saveSchedule } = setup()
-    const bad = withAssignment(validSchedule(), 0, 'opening', 'desmond') // not a key holder
+    const bad = withAssignment(validSchedule(), 0, 'opening', 'violet') // not a key holder
     const result = await run(saveSchedule, bad)
     expect(result).toMatchObject({ saved: false, violations: [{ rule: 'needs-key-holder' }] })
     expect(repo.saved).toEqual([])
   })
 
   it('checks time off recorded after the proposal', async () =&gt; {
-    // Priya asks for Wednesday off between the dry run and the save.
-    const { saveSchedule } = setup([{ employeeId: 'priya', date: '2026-11-25' }])
+    // Joel asks for Wednesday off between the dry run and the save.
+    const { saveSchedule } = setup([{ employeeId: 'joel', date: '2026-11-25' }])
     const result = await run(saveSchedule, validSchedule())
     expect(result).toMatchObject({ saved: false, violations: [{ rule: 'time-off' }] })
   })
@@ -155,15 +155,15 @@ describe('saveSchedule', () =&gt; {
 describe('getAvailability', () =&gt; {
   it('returns only time off inside the week', async () =&gt; {
     const { getAvailability } = setup([
-      { employeeId: 'priya', date: '2026-11-25' },
-      { employeeId: 'rosa', date: '2026-12-02' },
+      { employeeId: 'joel', date: '2026-11-25' },
+      { employeeId: 'alvin', date: '2026-12-02' },
     ])
     const result = await run(getAvailability, { weekStart: WEEK })
-    expect(result.timeOff).toEqual([{ employeeId: 'priya', date: '2026-11-25' }])
-    expect(result.standing).toContainEqual({ employeeId: 'theo', day: 'Sunday', shifts: 'all day' })
+    expect(result.timeOff).toEqual([{ employeeId: 'joel', date: '2026-11-25' }])
+    expect(result.standing).toContainEqual({ employeeId: 'marcus', day: 'Sunday', shifts: 'all day' })
   })
 })</code></pre>
-          <p>The third test is the reason for the write-time check: the week passed its dry run, then Priya asked for Wednesday off, and the save refuses.</p>
+          <p>The third test is the reason for the write-time check: the week passed its dry run, then Joel asked for Wednesday off, and the save refuses.</p>
         </div>
       </div>
 
@@ -271,7 +271,7 @@ export function Chat() {
   )
 }</code></pre>
           <p>Each message arrives as a list of parts: text, and one part per tool call. A tool part's <code>type</code> is <code>tool-</code> plus the tool's name, and its <code>state</code> moves from <code>input-streaming</code> through to <code>output-available</code>. A call that needs approval stops at <code>approval-requested</code>.</p>
-          <p>The component draws an approval card for that state. <code>addToolApprovalResponse</code> records the answer. <code>sendAutomaticallyWhen: lastAssistantMessageIsCompleteWithApprovalResponses</code> sends it back to the route once every pending approval has an answer, and the agent picks up where it stopped: it runs <code>saveSchedule</code>, or, after a rejection, asks Rosa what to change.</p>
+          <p>The component draws an approval card for that state. <code>addToolApprovalResponse</code> records the answer. <code>sendAutomaticallyWhen: lastAssistantMessageIsCompleteWithApprovalResponses</code> sends it back to the route once every pending approval has an answer, and the agent picks up where it stopped: it runs <code>saveSchedule</code>, or, after a rejection, asks Alvin what to change.</p>
           <p>Because <code>useChat</code> knows the <code>SchedulerUIMessage</code> type, the compiler knows the types of <code>part.input.assignments</code> and <code>part.output.saved</code>. Rename a field in a tool and this file stops compiling.</p>
           <div class="step">Create components/WeekTable.tsx</div>
 <pre><code class="language-tsx" data-source="components/WeekTable.tsx">import { DAY_NAMES, DAYS, SHIFT_TYPES } from '@/lib/store'
@@ -356,7 +356,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <a href="part7.html">Next: Specialists &rarr;</a>
     </nav>
     <footer>
-      Built with Next.js, the AI SDK, Neon, and Vercel. Fabulosa Books is an independent bookstore in San Francisco's Castro. The staff in this tutorial are fictional.
+      Built with Next.js, the AI SDK, Neon, and Vercel. Fabulosa Books is an independent bookstore in San Francisco's Castro.
     </footer>
   </div>
 </body>

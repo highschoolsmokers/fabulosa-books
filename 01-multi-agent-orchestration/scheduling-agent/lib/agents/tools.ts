@@ -15,7 +15,7 @@ const weekStart = z
 const assignment = z.object({
   day: z.number().int().min(0).max(6).describe('0 = Sunday … 6 = Saturday'),
   shift: z.enum(['opening', 'mid', 'closing']),
-  employeeId: z.string().describe('An id from getStaff, such as "rosa".'),
+  employeeId: z.string().describe('An id from getStaff, such as "alvin".'),
 })
 
 export const scheduleInput = z.object({
