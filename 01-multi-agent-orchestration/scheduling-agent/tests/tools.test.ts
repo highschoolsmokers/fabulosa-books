@@ -32,15 +32,15 @@ describe('saveSchedule', () => {
 // #region save-tests
   it('refuses an invalid week even after approval', async () => {
     const { repo, saveSchedule } = setup()
-    const bad = withAssignment(validSchedule(), 0, 'opening', 'desmond') // not a key holder
+    const bad = withAssignment(validSchedule(), 0, 'opening', 'violet') // not a key holder
     const result = await run(saveSchedule, bad)
     expect(result).toMatchObject({ saved: false, violations: [{ rule: 'needs-key-holder' }] })
     expect(repo.saved).toEqual([])
   })
 
   it('checks time off recorded after the proposal', async () => {
-    // Priya asks for Wednesday off between the dry run and the save.
-    const { saveSchedule } = setup([{ employeeId: 'priya', date: '2026-11-25' }])
+    // Joel asks for Wednesday off between the dry run and the save.
+    const { saveSchedule } = setup([{ employeeId: 'joel', date: '2026-11-25' }])
     const result = await run(saveSchedule, validSchedule())
     expect(result).toMatchObject({ saved: false, violations: [{ rule: 'time-off' }] })
   })
@@ -50,11 +50,11 @@ describe('saveSchedule', () => {
 describe('getAvailability', () => {
   it('returns only time off inside the week', async () => {
     const { getAvailability } = setup([
-      { employeeId: 'priya', date: '2026-11-25' },
-      { employeeId: 'rosa', date: '2026-12-02' },
+      { employeeId: 'joel', date: '2026-11-25' },
+      { employeeId: 'alvin', date: '2026-12-02' },
     ])
     const result = await run(getAvailability, { weekStart: WEEK })
-    expect(result.timeOff).toEqual([{ employeeId: 'priya', date: '2026-11-25' }])
-    expect(result.standing).toContainEqual({ employeeId: 'theo', day: 'Sunday', shifts: 'all day' })
+    expect(result.timeOff).toEqual([{ employeeId: 'joel', date: '2026-11-25' }])
+    expect(result.standing).toContainEqual({ employeeId: 'marcus', day: 'Sunday', shifts: 'all day' })
   })
 })

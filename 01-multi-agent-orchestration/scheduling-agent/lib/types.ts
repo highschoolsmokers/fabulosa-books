@@ -10,7 +10,7 @@ export interface Employee {
   maxShiftsPerWeek: number
 }
 
-// A standing constraint: "Theo can't work Sundays."
+// A standing constraint: "Marcus can't work Sundays."
 // No `shifts` means the whole day.
 export interface Unavailability {
   employeeId: string

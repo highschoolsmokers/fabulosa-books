@@ -208,7 +208,7 @@ CREATE TABLE IF NOT EXISTS assignments (
           <p>The schema enforces what it can. <code>CHECK</code> constraints reject a week start that isn't a Sunday and a shift that doesn't exist. The primary key on <code>assignments</code> allows one person per shift. Rules that depend on more than one row, such as weekly limits and availability, live in <code>validateSchedule</code> in Part 4.</p>
           <div class="step">Create scripts/setup-db.ts</div>
           <p>This script runs the schema and loads the staff. It imports <code>lib/seed.ts</code>, which you'll create in Part 4, so run it at the end of that part.</p>
-<pre><code class="language-ts" data-source="scripts/setup-db.ts">// Create the tables and load the fictional staff.
+<pre><code class="language-ts" data-source="scripts/setup-db.ts">// Create the tables and load the staff.
 // Run with: npm run db:setup  (reads DATABASE_URL from .env.local)
 import { readFile } from 'node:fs/promises'
 import { neon } from '@neondatabase/serverless'
@@ -254,7 +254,7 @@ console.log(`Loaded ${STAFF.length} employees and ${UNAVAILABILITY.length} stand
       <a href="part4.html">Next: Data and Rules &rarr;</a>
     </nav>
     <footer>
-      Built with Next.js, the AI SDK, Neon, and Vercel. Fabulosa Books is an independent bookstore in San Francisco's Castro. The staff in this tutorial are fictional.
+      Built with Next.js, the AI SDK, Neon, and Vercel. Fabulosa Books is an independent bookstore in San Francisco's Castro.
     </footer>
   </div>
 </body>

@@ -7,13 +7,13 @@ export const WEEK = '2026-11-22'
 
 const grid: Record<Day, [string, string, string]> = {
   //  opening  mid        closing
-  0: ['rosa', 'kenji', 'june'],
-  1: ['theo', 'kenji', 'rosa'],
-  2: ['june', 'desmond', 'theo'],
-  3: ['priya', 'desmond', 'june'],
-  4: ['rosa', 'desmond', 'theo'],
-  5: ['june', 'mara', 'priya'],
-  6: ['rosa', 'desmond', 'felix'],
+  0: ['alvin', 'johnny', 'dylan'],
+  1: ['marcus', 'johnny', 'alvin'],
+  2: ['dylan', 'violet', 'marcus'],
+  3: ['joel', 'violet', 'dylan'],
+  4: ['alvin', 'violet', 'marcus'],
+  5: ['dylan', 'melissa', 'joel'],
+  6: ['alvin', 'violet', 'billy'],
 }
 
 const SHIFTS: ShiftType[] = ['opening', 'mid', 'closing']

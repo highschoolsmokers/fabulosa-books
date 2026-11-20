@@ -48,7 +48,7 @@ const weekStart = z
 const assignment = z.object({
   day: z.number().int().min(0).max(6).describe('0 = Sunday … 6 = Saturday'),
   shift: z.enum(['opening', 'mid', 'closing']),
-  employeeId: z.string().describe('An id from getStaff, such as "rosa".'),
+  employeeId: z.string().describe('An id from getStaff, such as "alvin".'),
 })
 
 export const scheduleInput = z.object({
@@ -327,7 +327,7 @@ describe('scheduling agent', () =&gt; {
   })
 
   it('reads violations back and retries until the week is valid', async () =&gt; {
-    const broken = withAssignment(validSchedule(), 0, 'closing', 'theo') // Theo is off Sundays
+    const broken = withAssignment(validSchedule(), 0, 'closing', 'marcus') // Marcus is off Sundays
     const { model, calls } = scriptedModel([
       { toolCalls: [{ toolName: 'proposeSchedule', input: broken }] },
       { toolCalls: [{ toolName: 'proposeSchedule', input: validSchedule() }] },
@@ -338,7 +338,7 @@ describe('scheduling agent', () =&gt; {
 
     expect(lastToolResult(calls[1])).toMatchObject({
       type: 'json',
-      value: { valid: false, violations: [{ rule: 'unavailable', employeeId: 'theo' }] },
+      value: { valid: false, violations: [{ rule: 'unavailable', employeeId: 'marcus' }] },
     })
     expect(lastToolResult(calls[2])).toMatchObject({ value: { valid: true, violations: [] } })
     expect(result.text).toBe('Here is the week.')
@@ -361,8 +361,8 @@ describe('scheduling agent', () =&gt; {
     const { model: specialist, calls: specialistCalls } = scriptedModel([
       {
         text: JSON.stringify({
-          findings: [{ severity: 'concern', employeeId: 'june', message: 'June closes 3 of 7 nights.' }],
-          summary: 'June carries most closings.',
+          findings: [{ severity: 'concern', employeeId: 'dylan', message: 'Dylan closes 3 of 7 nights.' }],
+          summary: 'Dylan carries most closings.',
         }),
       },
     ])
@@ -378,7 +378,7 @@ describe('scheduling agent', () =&gt; {
     // The scheduler got a short text summary, not the subagent's transcript.
     expect(lastToolResult(calls[1])).toEqual({
       type: 'text',
-      value: 'Fairness: June carries most closings.\n- [concern] june: June closes 3 of 7 nights.',
+      value: 'Fairness: Dylan carries most closings.\n- [concern] dylan: Dylan closes 3 of 7 nights.',
     })
   })
 
@@ -394,7 +394,7 @@ describe('scheduling agent', () =&gt; {
 })</code></pre>
           <p>Start with the second test, which scripts a model that proposes a broken week and then a fixed one:</p>
 <pre><code class="language-ts" data-source="tests/agent.test.ts#retry-test">it('reads violations back and retries until the week is valid', async () =&gt; {
-  const broken = withAssignment(validSchedule(), 0, 'closing', 'theo') // Theo is off Sundays
+  const broken = withAssignment(validSchedule(), 0, 'closing', 'marcus') // Marcus is off Sundays
   const { model, calls } = scriptedModel([
     { toolCalls: [{ toolName: 'proposeSchedule', input: broken }] },
     { toolCalls: [{ toolName: 'proposeSchedule', input: validSchedule() }] },
@@ -405,12 +405,12 @@ describe('scheduling agent', () =&gt; {
 
   expect(lastToolResult(calls[1])).toMatchObject({
     type: 'json',
-    value: { valid: false, violations: [{ rule: 'unavailable', employeeId: 'theo' }] },
+    value: { valid: false, violations: [{ rule: 'unavailable', employeeId: 'marcus' }] },
   })
   expect(lastToolResult(calls[2])).toMatchObject({ value: { valid: true, violations: [] } })
   expect(result.text).toBe('Here is the week.')
 })</code></pre>
-          <p>The test checks the second request: the model received <code>valid: false</code> and a violation naming Theo. A scripted model can't check whether a real model would fix the week; that's the job of the evals in Part 8. It does check everything around the model: that the tool ran, that the rules caught the problem, and that the result went back into the conversation.</p>
+          <p>The test checks the second request: the model received <code>valid: false</code> and a violation naming Marcus. A scripted model can't check whether a real model would fix the week; that's the job of the evals in Part 8. It does check everything around the model: that the tool ran, that the rules caught the problem, and that the result went back into the conversation.</p>
 <pre><code class="language-bash">npm test</code></pre>
         </div>
       </div>
@@ -421,7 +421,7 @@ describe('scheduling agent', () =&gt; {
       <a href="part6.html">Next: Writing Safely &rarr;</a>
     </nav>
     <footer>
-      Built with Next.js, the AI SDK, Neon, and Vercel. Fabulosa Books is an independent bookstore in San Francisco's Castro. The staff in this tutorial are fictional.
+      Built with Next.js, the AI SDK, Neon, and Vercel. Fabulosa Books is an independent bookstore in San Francisco's Castro.
     </footer>
   </div>
 </body>
