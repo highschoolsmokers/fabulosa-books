@@ -6,9 +6,10 @@
   <title>Part 7: Specialists</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;600;700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/atom-one-dark.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/github.min.css" media="(prefers-color-scheme: light)">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
   <script>hljs.highlightAll();</script>
 </head>
@@ -37,7 +38,7 @@
         <h2>Count in code, judge with the model</h2>
         <div class="section-content">
           <p>Models make arithmetic mistakes. The reviewer never counts shifts; the code counts them and the model reads the counts.</p>
-          <div class="step">Step 33: Create lib/agents/fairness.ts</div>
+          <div class="step">Create lib/agents/fairness.ts</div>
 <pre><code class="language-ts" data-source="lib/agents/fairness.ts">import { type LanguageModel, Output, ToolLoopAgent, tool } from 'ai'
 import { z } from 'zod'
 import type { Repository } from '../db/repository'
@@ -155,7 +156,7 @@ export function createFairnessTool(repo: Repository, model: LanguageModel) {
         <h2>The announcement</h2>
         <div class="section-content">
           <p>After Rosa saves a week, she posts it to the staff group chat. The second specialist drafts that message.</p>
-          <div class="step">Step 34: Create lib/agents/communication.ts</div>
+          <div class="step">Create lib/agents/communication.ts</div>
 <pre><code class="language-ts" data-source="lib/agents/communication.ts">import { generateText, type LanguageModel, tool } from 'ai'
 import { z } from 'zod'
 import type { Repository } from '../db/repository'
