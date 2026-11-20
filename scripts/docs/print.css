@@ -1,0 +1,17 @@
+@page { size: A4; margin: 2cm 2cm 2.2cm; @bottom-center { content: counter(page); font-size: 9pt; color: #666; } }
+html { font-family: Georgia, "Times New Roman", serif; font-size: 11pt; line-height: 1.45; color: #1d1b18; }
+body { max-width: none; margin: 0; padding: 0; }
+h1 { font-size: 22pt; line-height: 1.2; margin: 0 0 6pt; }
+h2 { font-size: 17pt; margin: 0 0 8pt; break-before: page; }
+h3 { font-size: 13pt; margin: 18pt 0 6pt; break-after: avoid; }
+hr { display: none; }
+p, li { orphans: 3; widows: 3; }
+strong { font-weight: 700; }
+code { font-family: Menlo, "DejaVu Sans Mono", monospace; font-size: 9pt; }
+pre { background: #f4f2ee; border: 1px solid #ddd8cf; border-radius: 3px; padding: 6pt 8pt; white-space: pre-wrap; word-break: break-word; font-size: 8pt; line-height: 1.35; }
+pre code { font-size: 8pt; }
+table { border-collapse: collapse; width: 100%; font-size: 9.5pt; margin: 6pt 0 10pt; break-inside: avoid; }
+th, td { border-bottom: 1px solid #ddd8cf; padding: 3pt 6pt; text-align: left; vertical-align: top; }
+th { border-bottom: 1.5px solid #1d1b18; }
+img { max-width: 100%; }
+header#title-block-header { display: none; }

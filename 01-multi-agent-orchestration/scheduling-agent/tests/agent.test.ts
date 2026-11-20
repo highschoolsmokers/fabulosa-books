@@ -22,7 +22,7 @@ describe('scheduling agent', () => {
 
 // #region retry-test
   it('reads violations back and retries until the week is valid', async () => {
-    const broken = withAssignment(validSchedule(), 0, 'closing', 'theo') // Theo is off Sundays
+    const broken = withAssignment(validSchedule(), 0, 'closing', 'marcus') // Marcus is off Sundays
     const { model, calls } = scriptedModel([
       { toolCalls: [{ toolName: 'proposeSchedule', input: broken }] },
       { toolCalls: [{ toolName: 'proposeSchedule', input: validSchedule() }] },
@@ -33,7 +33,7 @@ describe('scheduling agent', () => {
 
     expect(lastToolResult(calls[1])).toMatchObject({
       type: 'json',
-      value: { valid: false, violations: [{ rule: 'unavailable', employeeId: 'theo' }] },
+      value: { valid: false, violations: [{ rule: 'unavailable', employeeId: 'marcus' }] },
     })
     expect(lastToolResult(calls[2])).toMatchObject({ value: { valid: true, violations: [] } })
     expect(result.text).toBe('Here is the week.')
@@ -59,8 +59,8 @@ describe('scheduling agent', () => {
     const { model: specialist, calls: specialistCalls } = scriptedModel([
       {
         text: JSON.stringify({
-          findings: [{ severity: 'concern', employeeId: 'june', message: 'June closes 3 of 7 nights.' }],
-          summary: 'June carries most closings.',
+          findings: [{ severity: 'concern', employeeId: 'dylan', message: 'Dylan closes 3 of 7 nights.' }],
+          summary: 'Dylan carries most closings.',
         }),
       },
     ])
@@ -76,7 +76,7 @@ describe('scheduling agent', () => {
     // The scheduler got a short text summary, not the subagent's transcript.
     expect(lastToolResult(calls[1])).toEqual({
       type: 'text',
-      value: 'Fairness: June carries most closings.\n- [concern] june: June closes 3 of 7 nights.',
+      value: 'Fairness: Dylan carries most closings.\n- [concern] dylan: Dylan closes 3 of 7 nights.',
     })
   })
 
