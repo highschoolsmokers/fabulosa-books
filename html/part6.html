@@ -6,9 +6,10 @@
   <title>Part 6: Writing Safely</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;600;700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/atom-one-dark.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/github.min.css" media="(prefers-color-scheme: light)">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
   <script>hljs.highlightAll();</script>
 </head>
@@ -40,7 +41,7 @@
       <div class="section">
         <h2>The write tools</h2>
         <div class="section-content">
-          <div class="step">Step 27: Add the write tools to lib/agents/tools.ts</div>
+          <div class="step">Add the write tools to lib/agents/tools.ts</div>
 <pre><code class="language-ts" data-source="lib/agents/tools.ts#write-tools">export function createWriteTools(repo: Repository) {
   return {
     // Dry run. Returns the violations so the agent can fix them and try again.
@@ -87,7 +88,7 @@ toolApproval: { saveSchedule: 'user-approval' },</code></pre>
       <div class="section">
         <h2>Test the gate</h2>
         <div class="section-content">
-          <div class="step">Step 28: Read the approval test</div>
+          <div class="step">Read the approval test</div>
           <p>The test file from Part 5 already has it:</p>
 <pre><code class="language-ts" data-source="tests/agent.test.ts#approval-test">it('stops for approval before saveSchedule runs', async () =&gt; {
   const store = repo()
@@ -102,7 +103,7 @@ toolApproval: { saveSchedule: 'user-approval' },</code></pre>
   expect(store.saved).toEqual([])
 })</code></pre>
           <p>The scripted model calls <code>saveSchedule</code> with a legal week. The run ends with an approval request, and the repository's <code>saved</code> list is still empty.</p>
-          <div class="step">Step 29: Create tests/tools.test.ts</div>
+          <div class="step">Create tests/tools.test.ts</div>
           <p>These tests call the tools directly, the way <code>saveSchedule</code> runs after Rosa approves. The <code>run</code> helper unwraps a tool's result; a tool may stream its output, and these don't.</p>
 <pre><code class="language-ts" data-source="tests/tools.test.ts">import type { ToolExecutionOptions } from 'ai'
 import { describe, expect, it } from 'vitest'
@@ -169,7 +170,7 @@ describe('getAvailability', () =&gt; {
       <div class="section">
         <h2>The chat</h2>
         <div class="section-content">
-          <div class="step">Step 30: Create components/Chat.tsx</div>
+          <div class="step">Create components/Chat.tsx</div>
 <pre><code class="language-tsx" data-source="components/Chat.tsx">'use client'
 
 import { useChat } from '@ai-sdk/react'
@@ -272,7 +273,7 @@ export function Chat() {
           <p>Each message arrives as a list of parts: text, and one part per tool call. A tool part's <code>type</code> is <code>tool-</code> plus the tool's name, and its <code>state</code> moves from <code>input-streaming</code> through to <code>output-available</code>. A call that needs approval stops at <code>approval-requested</code>.</p>
           <p>The component draws an approval card for that state. <code>addToolApprovalResponse</code> records the answer. <code>sendAutomaticallyWhen: lastAssistantMessageIsCompleteWithApprovalResponses</code> sends it back to the route once every pending approval has an answer, and the agent picks up where it stopped: it runs <code>saveSchedule</code>, or, after a rejection, asks Rosa what to change.</p>
           <p>Because <code>useChat</code> knows the <code>SchedulerUIMessage</code> type, the compiler knows the types of <code>part.input.assignments</code> and <code>part.output.saved</code>. Rename a field in a tool and this file stops compiling.</p>
-          <div class="step">Step 31: Create components/WeekTable.tsx</div>
+          <div class="step">Create components/WeekTable.tsx</div>
 <pre><code class="language-tsx" data-source="components/WeekTable.tsx">import { DAY_NAMES, DAYS, SHIFT_TYPES } from '@/lib/store'
 import type { Assignment } from '@/lib/types'
 
@@ -305,7 +306,7 @@ export function WeekTable({ assignments }: { assignments: { day: number; shift: 
     &lt;/table&gt;
   )
 }</code></pre>
-          <div class="step">Step 32: Create the page, the layout, and the styles</div>
+          <div class="step">Create the page, the layout, and the styles</div>
 <pre><code class="language-tsx" data-source="app/page.tsx">import { Chat } from '@/components/Chat'
 
 export default function Page() {

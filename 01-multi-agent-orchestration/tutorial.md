@@ -143,7 +143,7 @@ Check your Node version first. The app needs Node 22 or later.
 node --version
 ```
 
-**Step 1: Create the folder and install the packages**
+**Create the folder and install the packages**
 
 ```bash
 mkdir fabulosa-scheduler && cd fabulosa-scheduler
@@ -154,7 +154,7 @@ npm install -D typescript @types/react @types/react-dom @types/node vitest @ai-s
 
 `ai` is the AI SDK: the agent class, tools, and streaming. `@ai-sdk/react` holds the `useChat` hook. `@ai-sdk/provider` is only for the tests, which build a fake model from its types.
 
-**Step 2: Set up package.json**
+**Set up package.json**
 
 Replace the generated `package.json` with this one. Your version numbers may be newer.
 
@@ -203,7 +203,7 @@ Replace the generated `package.json` with this one. Your version numbers may be 
 
 ### Configure TypeScript, Next.js, and Vitest
 
-**Step 3: Create tsconfig.json**
+**Create tsconfig.json**
 
 <!-- source: tsconfig.json -->
 ```json
@@ -253,7 +253,7 @@ Replace the generated `package.json` with this one. Your version numbers may be 
 
 The `@/*` path lets any file import from the project root, as in `@/lib/rules`. Next.js adds `allowJs`, `esModuleInterop`, and the `.next` includes the first time it builds; they're listed here so the file doesn't change under you.
 
-**Step 4: Create next.config.ts and vitest.config.ts**
+**Create next.config.ts and vitest.config.ts**
 
 <!-- source: next.config.ts -->
 ```ts
@@ -281,7 +281,7 @@ export default defineConfig({
 
 Vitest needs the same `@` alias as TypeScript. It picks up tests in `tests/`; the evals in Part 8 have a config of their own, so `npm test` never calls a real model.
 
-**Step 5: Create .gitignore**
+**Create .gitignore**
 
 ```plaintext
 node_modules/
@@ -296,7 +296,7 @@ next-env.d.ts
 
 The app needs two credentials: a Postgres connection string and access to the AI Gateway. Both come from Vercel, and neither goes in your code.
 
-**Step 6: Link the folder to a Vercel project**
+**Link the folder to a Vercel project**
 
 ```bash
 npm install -g vercel
@@ -305,11 +305,11 @@ vercel link
 
 `vercel link` asks for your team and creates a project, or links an existing one. It writes a `.vercel` folder, which `.gitignore` already excludes.
 
-**Step 7: Add a Neon database**
+**Add a Neon database**
 
 In the Vercel dashboard, open the project, go to **Storage**, and create a Neon Postgres database connected to the project. Vercel adds `DATABASE_URL` to the project's environment variables.
 
-**Step 8: Pull the environment**
+**Pull the environment**
 
 ```bash
 vercel env pull .env.local
@@ -317,13 +317,13 @@ vercel env pull .env.local
 
 This writes `DATABASE_URL` and `VERCEL_OIDC_TOKEN` to `.env.local`. The AI SDK uses the OIDC token to reach the AI Gateway, so the app needs no Anthropic key. The token expires after about twelve hours; run `vercel env pull` again when model calls start failing with an authentication error. Deployed on Vercel, the app gets a fresh token on every request.
 
-**Step 9: Add a card to the AI Gateway**
+**Add a card to the AI Gateway**
 
 The AI Gateway serves requests only after your Vercel team has a credit card on file. Without one, every model call fails with HTTP 403 and the error type `customer_verification_required`. In the Vercel dashboard, open your team's **AI Gateway** page and add a card. Adding one also unlocks the gateway's free credits.
 
 ### Create the tables
 
-**Step 10: Create lib/db/schema.sql**
+**Create lib/db/schema.sql**
 
 <!-- source: lib/db/schema.sql#schema -->
 ```sql
@@ -359,7 +359,7 @@ CREATE TABLE IF NOT EXISTS assignments (
 
 The schema enforces what it can. `CHECK` constraints reject a week start that isn't a Sunday and a shift that doesn't exist. The primary key on `assignments` allows one person per shift. Rules that depend on more than one row, such as weekly limits and availability, live in `validateSchedule` in Part 4.
 
-**Step 11: Create scripts/setup-db.ts**
+**Create scripts/setup-db.ts**
 
 This script runs the schema and loads the staff. It imports `lib/seed.ts`, which you'll create in Part 4, so run it at the end of that part.
 
@@ -411,7 +411,7 @@ Every insert runs inside one transaction, and each employee upsert replaces the 
 
 ### Types
 
-**Step 12: Create lib/types.ts**
+**Create lib/types.ts**
 
 <!-- source: lib/types.ts -->
 ```ts
@@ -459,7 +459,7 @@ Availability comes in two forms. `Unavailability` repeats every week ("Theo can'
 
 ### Hours and shifts in code
 
-**Step 13: Create lib/store.ts**
+**Create lib/store.ts**
 
 <!-- source: lib/store.ts -->
 ```ts
@@ -518,7 +518,7 @@ One function returns the hours for any day and shift, so the Friday and Saturday
 
 The earlier version of this app built date strings with `new Date().toISOString()`. That function returns the date in UTC. At 5pm on a Saturday in San Francisco it is already Sunday in UTC, so "this week" turned into next week every weekend evening.
 
-**Step 14: Create lib/dates.ts**
+**Create lib/dates.ts**
 
 <!-- source: lib/dates.ts -->
 ```ts
@@ -571,7 +571,7 @@ export function isWeekStart(date: string): boolean {
 
 ### The staff
 
-**Step 15: Create lib/seed.ts**
+**Create lib/seed.ts**
 
 <!-- source: lib/seed.ts -->
 ```ts
@@ -611,7 +611,7 @@ It prints `Loaded 8 employees and 6 standing constraints.`
 
 `validateSchedule` is the most important function in the app. The agent's whole job is to produce a week that this function accepts.
 
-**Step 16: Create lib/rules.ts**
+**Create lib/rules.ts**
 
 <!-- source: lib/rules.ts -->
 ```ts
@@ -751,7 +751,7 @@ Three choices here matter for the agent:
 
 The tests start from one legal week and change one shift at a time. If a test breaks, you know which rule broke it.
 
-**Step 17: Create tests/fixtures.ts**
+**Create tests/fixtures.ts**
 
 <!-- source: tests/fixtures.ts -->
 ```ts
@@ -797,7 +797,7 @@ export function withAssignment(schedule: Schedule, day: Day, shift: ShiftType, e
 export const ctx: RuleContext = { staff: STAFF, unavailability: UNAVAILABILITY, timeOff: [] }
 ```
 
-**Step 18: Create tests/rules.test.ts**
+**Create tests/rules.test.ts**
 
 The full file has a test for each rule. Two of them:
 
@@ -825,7 +825,7 @@ npm test
 
 The agent's tools read and write through an interface. The app passes in a Neon version; the tests and evals pass in one that keeps everything in memory.
 
-**Step 19: Create lib/db/repository.ts**
+**Create lib/db/repository.ts**
 
 <!-- source: lib/db/repository.ts -->
 ```ts
@@ -880,7 +880,7 @@ export function createMemoryRepository(seed: {
 
 `createMemoryRepository` is the version the tests use. It records every save in a `saved` array, so a test can check that nothing was written.
 
-**Step 20: Create lib/db/neon.ts**
+**Create lib/db/neon.ts**
 
 <!-- source: lib/db/neon.ts -->
 ```ts
@@ -1007,7 +1007,7 @@ Two details: the queries cast `DATE` columns to text, so the driver returns `"20
 
 A tool has a description, an input schema, and an `execute` function. The AI SDK sends the description and a JSON Schema version of the input schema to the model. When the model calls the tool, the SDK checks the input against the schema before `execute` runs. Input that fails the check never reaches your code; the model gets the error message and can try again.
 
-**Step 21: Create lib/agents/tools.ts**
+**Create lib/agents/tools.ts**
 
 Start with the imports, the shared schemas, and a helper that loads everything `validateSchedule` needs for one week:
 
@@ -1054,7 +1054,7 @@ The `refine` on `weekStart` is the reason a Monday never reaches the database. `
 
 ### The read tools
 
-**Step 22: Add the read tools to the same file**
+**Add the read tools to the same file**
 
 <!-- source: lib/agents/tools.ts#read-tools -->
 ```ts
@@ -1111,7 +1111,7 @@ The tools come from a function that takes the repository. Nothing in the file im
 
 ### The agent
 
-**Step 23: Create lib/agents/scheduler.ts**
+**Create lib/agents/scheduler.ts**
 
 This is the finished agent. Two of its tools, `reviewFairness` and `draftAnnouncement`, come from Part 7. Until you build them, leave out those two tool lines and their imports.
 
@@ -1204,7 +1204,7 @@ Read the instructions closely. They do four jobs:
 
 ### The API route
 
-**Step 24: Create app/api/chat/route.ts**
+**Create app/api/chat/route.ts**
 
 <!-- source: app/api/chat/route.ts -->
 ```ts
@@ -1240,7 +1240,7 @@ The route builds a new agent on every request, so `today` is never stale. `creat
 
 An agent test that calls a real model costs money and gives a different answer each run. These tests replace the model with a script: on each call, the fake model returns the next tool call or reply in the list. The tools, the schemas, and the loop all run for real.
 
-**Step 25: Create tests/mock-model.ts**
+**Create tests/mock-model.ts**
 
 <!-- source: tests/mock-model.ts -->
 ```ts
@@ -1301,7 +1301,7 @@ export function lastToolResult(options: LanguageModelV4CallOptions): unknown {
 
 The first test checks the date in the instructions. The third checks the approval gate, which Part 6 covers. The fourth checks the fairness subagent from Part 7. The last sends a Monday as a week start and checks that the schema error reaches the model.
 
-**Step 26: Create tests/agent.test.ts**
+**Create tests/agent.test.ts**
 
 <!-- source: tests/agent.test.ts -->
 ```ts
@@ -1438,7 +1438,7 @@ The agent can read anything, but only one tool can change the database. A week g
 
 ### The write tools
 
-**Step 27: Add the write tools to lib/agents/tools.ts**
+**Add the write tools to lib/agents/tools.ts**
 
 <!-- source: lib/agents/tools.ts#write-tools -->
 ```ts
@@ -1493,7 +1493,7 @@ The setting lives on the agent, not the tool. A different agent could reuse `sav
 
 ### Test the gate
 
-**Step 28: Read the approval test**
+**Read the approval test**
 
 The test file from Part 5 already has it:
 
@@ -1515,7 +1515,7 @@ it('stops for approval before saveSchedule runs', async () => {
 
 The scripted model calls `saveSchedule` with a legal week. The run ends with an approval request, and the repository's `saved` list is still empty.
 
-**Step 29: Create tests/tools.test.ts**
+**Create tests/tools.test.ts**
 
 These tests call the tools directly, the way `saveSchedule` runs after Rosa approves. The `run` helper unwraps a tool's result; a tool may stream its output, and these don't.
 
@@ -1585,7 +1585,7 @@ The third test is the reason for the write-time check: the week passed its dry r
 
 ### The chat
 
-**Step 30: Create components/Chat.tsx**
+**Create components/Chat.tsx**
 
 <!-- source: components/Chat.tsx -->
 ```tsx
@@ -1696,7 +1696,7 @@ The component draws an approval card for that state. `addToolApprovalResponse` r
 
 Because `useChat` knows the `SchedulerUIMessage` type, the compiler knows the types of `part.input.assignments` and `part.output.saved`. Rename a field in a tool and this file stops compiling.
 
-**Step 31: Create components/WeekTable.tsx**
+**Create components/WeekTable.tsx**
 
 <!-- source: components/WeekTable.tsx -->
 ```tsx
@@ -1734,7 +1734,7 @@ export function WeekTable({ assignments }: { assignments: { day: number; shift: 
 }
 ```
 
-**Step 32: Create the page, the layout, and the styles**
+**Create the page, the layout, and the styles**
 
 <!-- source: app/page.tsx -->
 ```tsx
@@ -1800,7 +1800,7 @@ The fairness reviewer runs as a subagent: a separate agent with its own short in
 
 Models make arithmetic mistakes. The reviewer never counts shifts; the code counts them and the model reads the counts.
 
-**Step 33: Create lib/agents/fairness.ts**
+**Create lib/agents/fairness.ts**
 
 <!-- source: lib/agents/fairness.ts -->
 ```ts
@@ -1926,7 +1926,7 @@ The fourth test in `tests/agent.test.ts` checks both halves: the subagent receiv
 
 After Rosa saves a week, she posts it to the staff group chat. The second specialist drafts that message.
 
-**Step 34: Create lib/agents/communication.ts**
+**Create lib/agents/communication.ts**
 
 <!-- source: lib/agents/communication.ts -->
 ```ts
@@ -2008,7 +2008,7 @@ The tests so far use a scripted model. They prove the code around the model work
 
 Evals cost money and give a slightly different run each time, so they stay out of `npm test`.
 
-**Step 35: Create vitest.evals.config.ts**
+**Create vitest.evals.config.ts**
 
 <!-- source: vitest.evals.config.ts -->
 ```ts
@@ -2030,7 +2030,7 @@ export default defineConfig({
 })
 ```
 
-**Step 36: Create evals/scheduler.eval.ts**
+**Create evals/scheduler.eval.ts**
 
 <!-- source: evals/scheduler.eval.ts -->
 ```ts
