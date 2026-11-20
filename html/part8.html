@@ -6,9 +6,10 @@
   <title>Part 8: Making It Real</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;600;700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/atom-one-dark.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/github.min.css" media="(prefers-color-scheme: light)">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
   <script>hljs.highlightAll();</script>
 </head>
@@ -30,7 +31,7 @@
         <div class="section-content">
           <p>The tests so far use a scripted model. They prove the code around the model works: the rules, the tools, the approval gate, the subagent wiring. They can't prove that a real model, given "Schedule next week," produces a legal week. Evals do that. An eval runs the real agent against the real model on a fixed scenario and grades the result with code.</p>
           <p>Evals cost money and give a slightly different run each time, so they stay out of <code>npm test</code>.</p>
-          <div class="step">Step 35: Create vitest.evals.config.ts</div>
+          <div class="step">Create vitest.evals.config.ts</div>
 <pre><code class="language-ts" data-source="vitest.evals.config.ts">import { existsSync } from 'node:fs'
 import { defineConfig } from 'vitest/config'
 import base from './vitest.config'
@@ -47,7 +48,7 @@ export default defineConfig({
     testTimeout: 180_000,
   },
 })</code></pre>
-          <div class="step">Step 36: Create evals/scheduler.eval.ts</div>
+          <div class="step">Create evals/scheduler.eval.ts</div>
 <pre><code class="language-ts" data-source="evals/scheduler.eval.ts">// Evals run the real agent against the real model, so they cost money.
 // They stay out of `npm test`. Run them with `npm run eval` after `vercel env pull`.
 import { describe, expect, it } from 'vitest'
