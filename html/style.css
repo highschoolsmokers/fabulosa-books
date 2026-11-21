@@ -1,6 +1,6 @@
 /* Fabulosa Books tutorial: styles ported from ws-gong.com.
    Source: highschoolsmokers/ws-gong, src/app/globals.css at 2142146
-   (2026-11-19). The tokens, the 12-column grid, the labelled sections, and
+   (2026-11-19), plus the Dark+ code blocks from PR #45 (2026-11-20). The tokens, the 12-column grid, the labelled sections, and
    the row lists follow that file. When ws-gong's globals.css changes, port
    the change here; nothing links the two files automatically. */
 
@@ -11,7 +11,19 @@
   --foreground: light-dark(#161616, #ebebeb);
   --muted: light-dark(#6b6b6b, #9b9b9b);
   --rule-soft: light-dark(#e5e5e5, #2e2e2e);
-  --code-bg: light-dark(#f6f6f6, #181818);
+  --code-inline-bg: light-dark(#f6f6f6, #181818);
+  /* Code blocks: VS Code Dark+ in both themes, as on ws-gong. */
+  --code-bg: #1e1e1e;
+  --code-fg: #d4d4d4;
+  --code-comment: #6a9955;
+  --code-keyword: #569cd6;
+  --code-string: #ce9178;
+  --code-number: #b5cea8;
+  --code-function: #dcdcaa;
+  --code-type: #4ec9b0;
+  --code-variable: #9cdcfe;
+  --code-regexp: #d16969;
+  --code-constant: #4fc1ff;
   --gutter: 1.5rem;
   --margin: 2rem;
   --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
@@ -216,7 +228,7 @@ code {
   font-size: 0.85em;
 }
 :not(pre) > code {
-  background: var(--code-bg);
+  background: var(--code-inline-bg);
   border: 1px solid var(--rule-soft);
   border-radius: 3px;
   padding: 0.05em 0.3em;
@@ -224,9 +236,9 @@ code {
 }
 pre {
   background: var(--code-bg);
-  border: 1px solid var(--rule-soft);
-  border-radius: 4px;
+  color: var(--code-fg);
   overflow-x: auto;
+  scrollbar-color: var(--code-comment) transparent;
   font-size: 0.8125rem;
   line-height: 1.55;
   tab-size: 2;
@@ -238,6 +250,17 @@ pre code.hljs {
   background: transparent;
   font-size: inherit;
 }
+/* Dark+ token colors on highlight.js classes, matching ws-gong. */
+.hljs-comment { color: var(--code-comment); }
+:is(.hljs-keyword, .hljs-literal, .hljs-meta, .hljs-name) { color: var(--code-keyword); }
+.hljs-string { color: var(--code-string); }
+.hljs-number { color: var(--code-number); }
+:is(.hljs-title.function_, .hljs-built_in) { color: var(--code-function); }
+:is(.hljs-title.class_, .hljs-type) { color: var(--code-type); }
+:is(.hljs-attr, .hljs-attribute, .hljs-variable, .hljs-params, .hljs-property) { color: var(--code-variable); }
+.hljs-regexp { color: var(--code-regexp); }
+.hljs-variable.constant_ { color: var(--code-constant); }
+.hljs-variable.language_ { color: var(--code-keyword); }
 
 /* Tables: rows with hairlines, like ws-gong's row lists */
 .table-wrap {
@@ -335,5 +358,11 @@ footer {
   pre {
     white-space: pre-wrap;
     break-inside: avoid;
+    border-block: 1px solid var(--rule-soft);
+  }
+  pre,
+  pre * {
+    background: none;
+    color: black;
   }
 }
