@@ -134,7 +134,7 @@ describe('scheduler evals', () =&gt; {
       <div class="section">
         <h2>Step limits</h2>
         <div class="section-content">
-          <p>The scheduling agent stops after 20 steps (<code>stopWhen: isStepCount(20)</code>). A full week takes about eight: two reads, two or three proposals, a fairness review, and the save. The limit leaves room for a hard week and stops a run that has lost its way before it spends real money. If the eval runs start approaching the limit, look at the violations the agent is failing to fix before raising it.</p>
+          <p>The scheduling agent stops after 20 steps (<code>stopWhen: isStepCount(20)</code>). A full week takes about seven: two reads, two or three proposals, a fairness review, and the save. The limit leaves room for a hard week and stops a run that has lost its way before it spends real money. If the eval runs start approaching the limit, look at the violations the agent is failing to fix before raising it.</p>
           <p>The route's <code>maxDuration</code> of 60 seconds is the second limit. Each step is at least one model call, and twenty slow calls would pass it.</p>
         </div>
       </div>
