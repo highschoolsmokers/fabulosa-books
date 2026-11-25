@@ -193,7 +193,7 @@ export function createSchedulingAgent({
     },
     // A person approves every write. The other tools run on their own.
     toolApproval: { saveSchedule: 'user-approval' },
-    // A full week takes about eight steps. Twenty leaves room for fixes
+    // A full week takes about seven steps. Twenty leaves room for fixes
     // and stops a confused loop before it gets expensive.
     stopWhen: isStepCount(20),
   })

@@ -20,7 +20,7 @@ The staff are the real crew, by first name. Their availability in the examples i
 
 The schedule used to be a sheet of paper taped up behind the register. The manager filled it in by hand each week. To see a shift, you came into the store. To swap one, you crossed out a name and wrote in another.
 
-Filling in the sheet took longer than writing it. The manager had to keep track of who couldn't work Sundays, who had asked for a Wednesday off, who held keys, who was close to their weekly limit, and who had closed three Saturdays running. None of that was on the paper.
+Writing in the names was the quick part. The manager had to keep track of who couldn't work Sundays, who had asked for a Wednesday off, who held keys, who was close to their weekly limit, and who had closed three Saturdays running. None of that was on the paper.
 
 ### Hours and shifts
 
@@ -1182,7 +1182,7 @@ export function createSchedulingAgent({
     },
     // A person approves every write. The other tools run on their own.
     toolApproval: { saveSchedule: 'user-approval' },
-    // A full week takes about eight steps. Twenty leaves room for fixes
+    // A full week takes about seven steps. Twenty leaves room for fixes
     // and stops a confused loop before it gets expensive.
     stopWhen: isStepCount(20),
   })
@@ -2125,7 +2125,7 @@ The first scenario prints its step count and token total. Run the evals after an
 
 ### Step limits
 
-The scheduling agent stops after 20 steps (`stopWhen: isStepCount(20)`). A full week takes about eight: two reads, two or three proposals, a fairness review, and the save. The limit leaves room for a hard week and stops a run that has lost its way before it spends real money. If the eval runs start approaching the limit, look at the violations the agent is failing to fix before raising it.
+The scheduling agent stops after 20 steps (`stopWhen: isStepCount(20)`). A full week takes about seven: two reads, two or three proposals, a fairness review, and the save. The limit leaves room for a hard week and stops a run that has lost its way before it spends real money. If the eval runs start approaching the limit, look at the violations the agent is failing to fix before raising it.
 
 The route's `maxDuration` of 60 seconds is the second limit. Each step is at least one model call, and twenty slow calls would pass it.
 
