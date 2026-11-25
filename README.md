@@ -31,3 +31,8 @@ The app under `01-multi-agent-orchestration/scheduling-agent/` deploys to the Ve
 ```
 
 Without this, `next build` runs at the repo root and fails with `Couldn't find any 'pages' or 'app' directory`.
+
+## License
+
+Code is MIT licensed ([LICENSE](LICENSE)). The tutorial text in `html/` is
+CC BY 4.0 ([LICENSE-tutorial.md](LICENSE-tutorial.md)).
