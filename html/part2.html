@@ -27,6 +27,7 @@
       <div class="section">
         <h2>Two kinds of work</h2>
         <div class="section-content">
+          <p>This part explains the design. Parts 3 to 8 build it.</p>
           <p>Building a schedule involves two kinds of work. Some of it has a right answer: Marcus can't work Sundays, every shift needs one person, Melissa has a limit of two shifts. Some of it is judgment: whether Dylan has closed too often lately, or whether calling in an on-call person beats giving Violet a fifth shift.</p>
           <p>This app puts the first kind in code and gives the second kind to the model. A function called <code>validateSchedule</code> checks every rule and returns a list of violations. The model never decides whether a week is legal. It proposes a week, reads the violations, and tries again.</p>
           <p>The split decides most of the design:</p>
@@ -69,7 +70,7 @@
       <div class="section">
         <h2>One agent, two specialists</h2>
         <div class="section-content">
-          <p>An earlier version of this tutorial split the work across four agents: availability, fairness, coverage, and a coordinator. Two of those jobs, availability and coverage, have right answers. They became a tool and a function. That leaves one scheduling agent and two specialists it calls as tools:</p>
+          <p>The work divides among one function and three model-based parts. The scheduling agent calls the two specialists as tools:</p>
           <div class="table-wrap">
           <table>
             <thead>

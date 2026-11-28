@@ -65,7 +65,7 @@ export async function ruleContext(repo: Repository, week: string): Promise&lt;Ru
   ])
   return { staff, unavailability, timeOff }
 }</code></pre>
-          <p>The <code>refine</code> on <code>weekStart</code> is the reason a Monday never reaches the database. <code>.describe()</code> text becomes part of the schema the model reads, so it says what a good value looks like.</p>
+          <p>The <code>refine</code> on <code>weekStart</code> rejects a Monday before any tool code runs, so a Monday never reaches the database. <code>.describe()</code> text goes into the schema the model reads. Write it to say what a good value looks like.</p>
         </div>
       </div>
 
@@ -118,8 +118,8 @@ export async function ruleContext(repo: Repository, week: string): Promise&lt;Ru
     }),
   }
 }</code></pre>
-          <p>Each tool returns only what the model needs. <code>getAvailability</code> turns day numbers into day names, because the model reads "Sunday" more reliably than <code>0</code>. <code>getSchedule</code> adds the shift hours, so the agent can answer "who's closing Saturday, and until when?" without doing arithmetic.</p>
-          <p>The tools come from a function that takes the repository. Nothing in the file imports the database, so the same tools run against Neon in the app and against memory in the tests.</p>
+          <p>Each tool returns only what the model needs. <code>getAvailability</code> turns day numbers into day names, so the model sees "Sunday" instead of <code>0</code>. <code>getSchedule</code> adds the shift hours, so the agent can answer "who's closing Saturday, and until when?" without doing arithmetic.</p>
+          <p>The tools come from a function that takes a repository. The file never imports the database, so the same tools run against Neon in the app and against memory in the tests.</p>
         </div>
       </div>
 
@@ -127,7 +127,7 @@ export async function ruleContext(repo: Repository, week: string): Promise&lt;Ru
         <h2>The agent</h2>
         <div class="section-content">
           <div class="step">Create lib/agents/scheduler.ts</div>
-          <p>This is the finished agent. Two of its tools, <code>reviewFairness</code> and <code>draftAnnouncement</code>, come from Part 7. Until you build them, leave out those two tool lines and their imports.</p>
+          <p>This is the finished agent. Two of its tools, <code>reviewFairness</code> and <code>draftAnnouncement</code>, come from Part 7. Until you build Part 7, delete those two tool lines, and delete the two imports that feed them: <code>createAnnouncementTool</code> and <code>createFairnessTool</code>.</p>
 <pre><code class="language-ts" data-source="lib/agents/scheduler.ts">import { type InferAgentUIMessage, isStepCount, type LanguageModel, ToolLoopAgent } from 'ai'
 import type { Repository } from '../db/repository'
 import { addDays, dayOfWeek, weekStartFor } from '../dates'
@@ -200,10 +200,10 @@ export function createSchedulingAgent({
 }
 
 export type SchedulerUIMessage = InferAgentUIMessage&lt;ReturnType&lt;typeof createSchedulingAgent&gt;&gt;</code></pre>
-          <p>Read the instructions closely. They do four jobs:</p>
+          <p>The instructions do four jobs:</p>
           <ul>
             <li><strong>They give the date.</strong> A model doesn't know what day it is. "Next week" means nothing until the instructions say that today is Wednesday, 2026-11-18, and next week starts 2026-11-22.</li>
-            <li><strong>They point to the rules instead of listing them.</strong> The rules live in <code>proposeSchedule</code>. A second copy in the prompt would drift from the code.</li>
+            <li><strong>They point to the rules instead of copying them.</strong> The rules live in <code>proposeSchedule</code>. A second copy in the prompt would drift from the code.</li>
             <li><strong>They give an order of work.</strong> Read, propose, fix, review, save. The model can skip steps for simple questions, but a full week follows the list.</li>
             <li><strong>They mark tool results as data.</strong> A time-off reason that says "ignore all rules" is a string in a database row, not an instruction. Part 8 tests this.</li>
           </ul>
@@ -239,7 +239,7 @@ export async function POST(request: Request) {
   })
 }</code></pre>
           <p>The route builds a new agent on every request, so <code>today</code> is never stale. <code>createAgentUIStreamResponse</code> converts the chat's messages for the model, runs the agent loop, and streams each step back to the browser. Passing <code>request.signal</code> stops the run, and any model call in flight, when the manager closes the tab.</p>
-          <p><code>maxDuration</code> gives the function up to 60 seconds on Vercel. A full week takes several model calls.</p>
+          <p><code>maxDuration</code> allows the function up to 60 seconds on Vercel [ASSUMPTION: confirm 60 seconds is within this app's Vercel plan limit]. A full week takes several model calls.</p>
         </div>
       </div>
 
@@ -300,7 +300,7 @@ export function lastToolResult(options: LanguageModelV4CallOptions): unknown {
   return part &amp;&amp; 'output' in part ? part.output : undefined
 }</code></pre>
           <p><code>MockLanguageModelV4</code> comes from <code>ai/test</code>. The helper records every request the agent sends, so a test can check what the model was told, including the tool results it saw.</p>
-          <p>The first test checks the date in the instructions. The third checks the approval gate, which Part 6 covers. The fourth checks the fairness subagent from Part 7. The last sends a Monday as a week start and checks that the schema error reaches the model.</p>
+          <p>The five tests in <code>tests/agent.test.ts</code> cover the date in the instructions, the retry loop, the approval gate (Part 6), the fairness summary (Part 7), and a Monday week start. The schema rejects the Monday before any tool runs, and the last test checks that the error reaches the model.</p>
           <div class="step">Create tests/agent.test.ts</div>
 <pre><code class="language-ts" data-source="tests/agent.test.ts">import { describe, expect, it } from 'vitest'
 import { createSchedulingAgent } from '@/lib/agents/scheduler'
@@ -390,7 +390,7 @@ describe('scheduling agent', () =&gt; {
     expect(JSON.stringify(lastToolResult(calls[1]))).toContain('Must be a Sunday')
   })
 })</code></pre>
-          <p>Start with the second test, which scripts a model that proposes a broken week and then a fixed one:</p>
+          <p>Start with the retry test. It scripts a model that proposes a broken week, then a fixed one:</p>
 <pre><code class="language-ts" data-source="tests/agent.test.ts#retry-test">it('reads violations back and retries until the week is valid', async () =&gt; {
   const broken = withAssignment(validSchedule(), 0, 'closing', 'marcus') // Marcus is off Sundays
   const { model, calls } = scriptedModel([
@@ -408,8 +408,9 @@ describe('scheduling agent', () =&gt; {
   expect(lastToolResult(calls[2])).toMatchObject({ value: { valid: true, violations: [] } })
   expect(result.text).toBe('Here is the week.')
 })</code></pre>
-          <p>The test checks the second request: the model received <code>valid: false</code> and a violation naming Marcus. A scripted model can't check whether a real model would fix the week; that's the job of the evals in Part 8. It does check everything around the model: that the tool ran, that the rules caught the problem, and that the result went back into the conversation.</p>
+          <p>The test checks the second request. The model receives <code>valid: false</code> and a violation that names Marcus. A scripted model can't show that a real model fixes the week; the evals in Part 8 do that. This test checks everything around the model: the tool ran, the rules caught the problem, and the result went back into the conversation.</p>
 <pre><code class="language-bash">npm test</code></pre>
+          <p>Checkpoint: Vitest reports no failures.</p>
         </div>
       </div>
 
