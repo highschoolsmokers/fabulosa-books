@@ -22,7 +22,7 @@ The Castro was named for José Castro, a governor of Alta California. The neighb
 
 Harvey Milk, the first openly gay man elected to public office in California, was tragically assassinated in 1978, less than a year into his term on the San Francisco Board of Supervisors. From 1972 until then, he ran Castro Camera at 575 Castro Street, a block south of 489. The shop became the headquarters for Milk's campaigns for office, and people called him the "Mayor of Castro Street." A metal plaque in the sidewalk out front memorializes him.
 
-In 1978, while Milk was in office, 489 Castro Street was the Obelisk, a designer gift shop. Jack Fritscher's photographs from that year include a bodybuilder known as the Rent-A-Pose posing in the shop's doorway. Fritscher's account says the Obelisk later became A Different Light. The building still has obelisk-shaped door handles.
+In 1978, while Milk was in office, 489 Castro Street was the Obelisk, a designer gift shop. Jack Fritscher's photographs from that year include a bodybuilder known as the Rent-A-Pose posing in the shop's doorway. The building still has obelisk-shaped door handles.
 
 A Different Light was a chain of LGBT bookstores founded in Los Angeles in 1979. Its San Francisco branch opened at 489 Castro Street later in the 1980s.
 
