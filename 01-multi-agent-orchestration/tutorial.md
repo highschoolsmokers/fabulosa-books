@@ -40,7 +40,7 @@ Sources:
 - [“Homocore (zine),” Wikipedia](https://en.wikipedia.org/wiki/Homocore_(zine)).
 - [Laila Lalami, “Lesbian Writers Series,” March 30, 2004](https://lailalalami.com/2004/03/lesbian-writers-series/), quoting the *Los Angeles Times*.
 
-### The schedule on the wall
+### A cat calendar on the wall
 
 The schedule used to be a cat calendar on the wall behind the register, written in by hand each week. To see a shift, you came into the store. To swap one, you crossed out a name and wrote in another.
 
