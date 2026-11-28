@@ -18,29 +18,27 @@ The staff are the real crew, by first name. Their availability in the examples i
 
 ### The store's history
 
-Walk into Fabulosa Books, and the LGBTQIA+ titles greet you first. The store is an independent neighborhood bookstore in San Francisco's Castro. It sells queer books at the address where A Different Light served queer San Francisco through the 1980s, 1990s, and early 2000s.
+Fabulosa Books is an independent bookstore in San Francisco's Castro that specializes in LGBTQIA+ titles. It occupies the address where A Different Light once stood.
 
-Young gay people, mostly men, arrived from across the country. They came to the Castro, one of the first gay neighborhoods in the United States, where their sexual orientation was accepted.
+The Castro is a historically gay neighborhood, and young gay people came to it from across the country.
 
-Walk a block south from the store, and you reach 575 Castro Street. Harvey Milk ran Castro Camera there from 1972 until he was assassinated in 1978. He was the first openly gay man elected to public office in California.
+Walk a block south to 575 Castro Street, where Harvey Milk ran Castro Camera from 1972 until he was assassinated in 1978. He was the first openly gay man elected to public office in California.
 
 In 1978, while Milk was in office, 489 Castro Street was the Obelisk, a designer gift shop. I see its obelisk-shaped door handles every day.
 
-A Different Light, a chain of LGBT bookstores that began in Los Angeles in 1979, opened a San Francisco branch at this address later in the 1980s. Thom Gunn and Kevin Killian read in its gay series. Dorothy Allison and Kitty Tsui read in its lesbian series.
+A Different Light, a chain of LGBT bookstores, opened a branch here later in the 1980s. Thom Gunn and Kevin Killian read in its gay series. Dorothy Allison and Kitty Tsui read in its lesbian series.
 
-The store opened its space to outside groups, among them ACT UP (the AIDS Coalition To Unleash Power), HomoCore, and GLOE (Gay & Lesbian Outreach and Engagement).
+The store opened its space to outside groups, including ACT UP (the AIDS Coalition To Unleash Power), HomoCore, and GLOE (Gay & Lesbian Outreach and Engagement).
 
 HomoCore began in San Francisco in 1988 as a zine for young hardcore punks in the gay underground.
 
-The chain closed in 2011. Dog Eared Books moved into the space in 2016.
+After the chain closed in 2011, Dog Eared Books moved into the space in 2016.
 
 Armistead Maupin and Brontez Purnell read at Dog Eared's opening party that June.
 
-In 2021 the space reopened as Fabulosa Books.
+In 2021, the space reopened as Fabulosa Books.
 
-Susan Stryker presented Transgender History here in March 2026, and Michelle Tea hosted a launch in June.
-
-The sign has changed twice since 2011, but the address has stayed the same.
+Susan Stryker presented Transgender History here in 2026, and Michelle Tea featured at a book launch.
 
 ### A cat calendar on the wall
 
