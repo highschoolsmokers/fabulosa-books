@@ -12,7 +12,7 @@
 
 ![Fabulosa Books storefront in the Castro](../html/images/fabulosa-storefront.jpg)
 
-Fabulosa Books is an independent bookstore in San Francisco's Castro. I work there, and I built this scheduler for the store. This tutorial walks through the same build, one file at a time.
+Fabulosa Books is an independent bookstore in San Francisco's Castro. It specializes in LGBTQIA+ titles, with those sections displayed prominently at the front of the shop. I work there, and I built this scheduler for the store. This tutorial walks through the same build, one file at a time.
 
 The staff are the real crew, by first name. Their availability in the examples is made up; the store's hours and its scheduling problem are real.
 
