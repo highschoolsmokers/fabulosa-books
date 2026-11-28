@@ -27,11 +27,11 @@
       <div class="section">
         <h2>Three checks before a write</h2>
         <div class="section-content">
-          <p>The agent can read anything, but only one tool can change the database. A week goes through three checks before it saves:</p>
+          <p>The agent can read anything. Only one tool writes to the database: <code>saveSchedule</code>. A week passes three checks before it saves:</p>
           <ol>
             <li><strong>A dry run.</strong> <code>proposeSchedule</code> runs the rules and returns the violations. It never writes.</li>
             <li><strong>A person.</strong> <code>saveSchedule</code> needs Alvin's approval. The loop pauses, the chat shows the week, and the tool runs only if Alvin clicks Save.</li>
-            <li><strong>A second check at write time.</strong> <code>saveSchedule</code> runs the rules again on the input it receives. The model's earlier dry run proves nothing about the week it sends now, and someone may have asked for a day off in between.</li>
+            <li><strong>A second check at write time.</strong> <code>saveSchedule</code> runs the rules again on the input it receives. The earlier dry run doesn't cover the week the model sends now, and someone may have asked for a day off in between.</li>
           </ol>
         </div>
       </div>
@@ -87,7 +87,7 @@ toolApproval: { saveSchedule: 'user-approval' },</code></pre>
         <h2>Test the gate</h2>
         <div class="section-content">
           <div class="step">Read the approval test</div>
-          <p>The test file from Part 5 already has it:</p>
+          <p>The test is in <code>tests/agent.test.ts</code>, from Part 5:</p>
 <pre><code class="language-ts" data-source="tests/agent.test.ts#approval-test">it('stops for approval before saveSchedule runs', async () =&gt; {
   const store = repo()
   const { model } = scriptedModel([
@@ -161,7 +161,10 @@ describe('getAvailability', () =&gt; {
     expect(result.standing).toContainEqual({ employeeId: 'marcus', day: 'Sunday', shifts: 'all day' })
   })
 })</code></pre>
-          <p>The third test is the reason for the write-time check: the week passed its dry run, then Joel asked for Wednesday off, and the save refuses.</p>
+          <p>The third test covers the write-time check. The week passes its dry run. Then Joel asks for Wednesday off, and the save refuses.</p>
+          <p>Run the tests:</p>
+<pre><code class="language-bash">npm test</code></pre>
+          <p>Checkpoint: Vitest reports no failures.</p>
         </div>
       </div>
 
@@ -268,9 +271,9 @@ export function Chat() {
     &lt;/&gt;
   )
 }</code></pre>
-          <p>Each message arrives as a list of parts: text, and one part per tool call. A tool part's <code>type</code> is <code>tool-</code> plus the tool's name, and its <code>state</code> moves from <code>input-streaming</code> through to <code>output-available</code>. A call that needs approval stops at <code>approval-requested</code>.</p>
+          <p>Each message arrives as a list of parts: text, and one part per tool call. A tool part's <code>type</code> is <code>tool-</code> plus the tool's name. Its <code>state</code> moves from <code>input-streaming</code> to <code>output-available</code>. A call that needs approval stops at <code>approval-requested</code>.</p>
           <p>The component draws an approval card for that state. <code>addToolApprovalResponse</code> records the answer. <code>sendAutomaticallyWhen: lastAssistantMessageIsCompleteWithApprovalResponses</code> sends it back to the route once every pending approval has an answer, and the agent picks up where it stopped: it runs <code>saveSchedule</code>, or, after a rejection, asks Alvin what to change.</p>
-          <p>Because <code>useChat</code> knows the <code>SchedulerUIMessage</code> type, the compiler knows the types of <code>part.input.assignments</code> and <code>part.output.saved</code>. Rename a field in a tool and this file stops compiling.</p>
+          <p>Because <code>useChat</code> knows the <code>SchedulerUIMessage</code> type, the compiler knows the types of <code>part.input.assignments</code> and <code>part.output.saved</code>. Rename a field in a tool, and <code>npm run typecheck</code> reports an error here.</p>
           <div class="step">Create components/WeekTable.tsx</div>
 <pre><code class="language-tsx" data-source="components/WeekTable.tsx">import { DAY_NAMES, DAYS, SHIFT_TYPES } from '@/lib/store'
 import type { Assignment } from '@/lib/types'
@@ -335,15 +338,20 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     &lt;/html&gt;
   )
 }</code></pre>
-          <p>The stylesheet, <code>app/globals.css</code>, is in the app's repository. It sets 44-pixel touch targets on the buttons and the input; the staff check the schedule on their phones.</p>
+          <p>Copy <code>app/globals.css</code> from the app's repository. It sets 44-pixel touch targets on the buttons and the input, because staff check the schedule on their phones.</p>
         </div>
       </div>
 
       <div class="section">
         <h2>Run it</h2>
         <div class="section-content">
+<p>Start the app:</p>
 <pre><code class="language-bash">npm run dev</code></pre>
-          <p>Open <code>http://localhost:3000</code> and type "Schedule next week." The agent reads the staff and availability, proposes a week, fixes what the rules reject, and shows an approval card with the week laid out. Click <strong>Save</strong> and the week goes to Neon. Click <strong>Not yet</strong> and the agent asks what to change.</p>
+          <ol>
+            <li>Open <code>http://localhost:3000</code> and type "Schedule next week."</li>
+            <li>Wait for the approval card. The agent reads the staff and availability and fixes what the rules reject before it shows the card.</li>
+            <li>Click <strong>Save</strong> to write the week to Neon, or click <strong>Not yet</strong>. The agent then asks what to change.</li>
+          </ol>
           <p>Ask "Who's closing Saturday?" afterward. The agent calls <code>getSchedule</code> and answers from the saved week.</p>
         </div>
       </div>

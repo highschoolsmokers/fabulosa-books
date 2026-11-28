@@ -64,7 +64,7 @@ export interface Schedule {
   weekStart: string // YYYY-MM-DD, always a Sunday
   assignments: Assignment[]
 }</code></pre>
-          <p>Days are numbers, 0 for Sunday through 6 for Saturday, matching JavaScript's <code>getDay()</code> and Postgres's <code>DOW</code>. Employees have short ids such as <code>"alvin"</code>; the model writes those ids into schedules, and short ids are hard to get wrong.</p>
+          <p>Days are numbers: 0 is Sunday and 6 is Saturday. That matches JavaScript's <code>getDay()</code> and Postgres's <code>DOW</code>. This tutorial's prose says <em>staff</em> for the people; the code says <em>employees</em>. Each employee has a short id such as <code>"alvin"</code>. The model writes these ids into schedules, and a short id is hard to get wrong.</p>
           <p>Availability comes in two forms. <code>Unavailability</code> repeats every week ("Marcus can't work Sundays"). <code>TimeOff</code> is a single date ("Joel has a dentist appointment on the 25th").</p>
         </div>
       </div>
@@ -120,14 +120,14 @@ export function formatHour(hour: number): string {
   const h = hour % 12 === 0 ? 12 : hour % 12
   return `${h}${suffix}`
 }</code></pre>
-          <p>One function returns the hours for any day and shift, so the Friday and Saturday closings live in one place.</p>
+          <p><code>shiftTimes</code> returns the hours for any day and shift. The Friday and Saturday closing times live in that one function.</p>
         </div>
       </div>
 
       <div class="section">
         <h2>Dates without the time-zone bug</h2>
         <div class="section-content">
-          <p>The earlier version of this app built date strings with <code>new Date().toISOString()</code>. That function returns the date in UTC. At 5pm on a Saturday in San Francisco it is already Sunday in UTC, so "this week" turned into next week every weekend evening.</p>
+          <p>Don't build date strings with <code>new Date().toISOString()</code>. That method returns the date in UTC. At 5 p.m. on a Saturday in San Francisco, it is already Sunday in UTC, so "this week" moves to next week every weekend evening.</p>
           <div class="step">Create lib/dates.ts</div>
 <pre><code class="language-ts" data-source="lib/dates.ts">import { STORE_TIME_ZONE } from './store'
 import type { Day } from './types'
@@ -172,7 +172,7 @@ export function weekStartFor(date: string): string {
 export function isWeekStart(date: string): boolean {
   return /^\d{4}-\d{2}-\d{2}$/.test(date) &amp;&amp; dayOfWeek(date) === 0
 }</code></pre>
-          <p><code>storeToday</code> asks for the date in the store's time zone. Everything else works on plain <code>YYYY-MM-DD</code> strings and does its arithmetic in UTC, where no day is 23 or 25 hours long. <code>fromUTC</code> still calls <code>toISOString</code>, but only on a date that is already midnight UTC, so the result is the date you meant.</p>
+          <p><code>storeToday</code> reads the date in the store's time zone. The other functions take plain <code>YYYY-MM-DD</code> strings and do their arithmetic in UTC, where every day is 24 hours long. <code>fromUTC</code> still calls <code>toISOString</code>, but only on midnight UTC dates, so the output is the date that went in.</p>
         </div>
       </div>
 
@@ -202,16 +202,16 @@ export const UNAVAILABILITY: Unavailability[] = [
   { employeeId: 'johnny', day: 5, shifts: ['mid', 'closing'] },
   { employeeId: 'johnny', day: 6, shifts: ['mid', 'closing'] },
 ]</code></pre>
-          <p>Now run the setup script from Part 3:</p>
+          <p>Run the setup script from Part 3. It loads the crew above into the database. The availability and shift limits are made up for this tutorial.</p>
 <pre><code class="language-bash">npm run db:setup</code></pre>
-          <p>It prints <code>Loaded 8 employees and 6 standing constraints.</code></p>
+          <p>The script prints <code>Loaded 8 employees and 6 standing constraints.</code></p>
         </div>
       </div>
 
       <div class="section">
         <h2>The rules</h2>
         <div class="section-content">
-          <p><code>validateSchedule</code> is the most important function in the app. The agent's whole job is to produce a week that this function accepts.</p>
+          <p><code>validateSchedule</code> checks every hard rule in the app. The agent's job is to produce a week that this function accepts.</p>
           <div class="step">Create lib/rules.ts</div>
 <pre><code class="language-ts" data-source="lib/rules.ts">import { addDays } from './dates'
 import { DAY_NAMES, DAYS, needsKeyHolder, SHIFT_TYPES } from './store'
@@ -337,10 +337,10 @@ export function validateSchedule(schedule: Schedule, ctx: RuleContext): Violatio
 
   return violations
 }</code></pre>
-          <p>Three choices here matter for the agent:</p>
+          <p>Three choices in <code>validateSchedule</code> shape how the agent works:</p>
           <ul>
-            <li><strong>It reports every violation, not the first.</strong> The model can fix all of them in one pass instead of one per step.</li>
-            <li><strong>Each message is a sentence with names and days.</strong> The model reads the message, not the rule code. The code is for tests and the UI.</li>
+            <li><strong>It reports every violation, not only the first.</strong> The model can fix them in one pass instead of one per step.</li>
+            <li><strong>Each message is a sentence with names and days.</strong> The model reads the message. The <code>rule</code> field is for tests and code.</li>
             <li><strong>It takes its data as an argument.</strong> The function never touches the database, so a test can call it with any staff and any week.</li>
           </ul>
         </div>
@@ -403,15 +403,16 @@ it('respects shift-specific unavailability', () =&gt; {
   expect(rules(withAssignment(validSchedule(), 2, 'closing', 'dylan'))).toContain('unavailable')
   expect(rules()).not.toContain('unavailable')
 })</code></pre>
-          <p>The second test checks both directions: Dylan can't close on Tuesday, and the fixture, where Dylan opens on Tuesday, passes. The full test file is in the <a href="https://github.com/highschoolsmokers/fabulosa-books/tree/main/01-multi-agent-orchestration/scheduling-agent/tests">tests folder of the app</a>.</p>
+          <p>The second test checks both directions. Dylan can't close on Tuesday, and the unchanged fixture, where Dylan opens on Tuesday, passes. The full test file is in the <a href="https://github.com/highschoolsmokers/fabulosa-books/tree/main/01-multi-agent-orchestration/scheduling-agent/tests">tests folder of the app</a>.</p>
 <pre><code class="language-bash">npm test</code></pre>
+          <p>Checkpoint: Vitest reports no failures.</p>
         </div>
       </div>
 
       <div class="section">
         <h2>The repository</h2>
         <div class="section-content">
-          <p>The agent's tools read and write through an interface. The app passes in a Neon version; the tests and evals pass in one that keeps everything in memory.</p>
+          <p>The agent's tools reach the database only through a <code>Repository</code> interface. The app passes in the Neon implementation. The tests and evals pass in an in-memory implementation.</p>
           <div class="step">Create lib/db/repository.ts</div>
 <pre><code class="language-ts" data-source="lib/db/repository.ts">import type { Employee, Schedule, TimeOff, Unavailability } from '../types'
 
@@ -573,7 +574,7 @@ export function createNeonRepository(databaseUrl = process.env.DATABASE_URL): Re
     },
   }
 }</code></pre>
-          <p>Two details: the queries cast <code>DATE</code> columns to text, so the driver returns <code>"2026-11-22"</code> and never a JavaScript <code>Date</code> in the server's time zone; and <code>saveSchedule</code> replaces the week inside one transaction, so a failed save never leaves half a week behind.</p>
+          <p>Two details matter here: the queries cast <code>DATE</code> columns to text, so the driver returns <code>"2026-11-22"</code> and never a JavaScript <code>Date</code> in the server's time zone; and <code>saveSchedule</code> replaces the week inside one transaction, so a failed save never leaves half a week behind.</p>
         </div>
       </div>
 
