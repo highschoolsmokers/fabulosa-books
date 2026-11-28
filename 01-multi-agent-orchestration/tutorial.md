@@ -26,7 +26,7 @@ The Castro had gay bookstores before A Different Light. Paperback Traffic opened
 
 The store hosted gay and lesbian writers series. The chain's Lesbian Writers Series began in 1984, with one rule: every reader's name went into the publicity, so nobody could read in the closet. Playwright James Carroll Pickett, who also worked at the store, started the Gay Writers Series and hosted its monthly readings from 1987 to 1990. Readers included Thom Gunn and Kevin Killian in the gay series, and Dorothy Allison and Kitty Tsui in the lesbian series.
 
-The Community Space Series opened the store to outside groups, among them ACT UP (the AIDS Coalition To Unleash Power), HomoCore, and GLOE (Gay & Lesbian Outreach and Engagement). ACT UP met at the store, according to Alexander Chee's essay collection *How to Write an Autobiographical Novel: Essays*. HomoCore was a San Francisco zine that Tom Jennings and Deke Nihilson published from 1988 to 1991 for young hardcore punks in the gay underground. Its editors also organized events, and bands such as Fugazi and MDC played them.
+The Community Space Series opened the store to outside groups, among them ACT UP (the AIDS Coalition To Unleash Power), HomoCore, and GLOE (Gay & Lesbian Outreach and Engagement). HomoCore was a San Francisco zine that Tom Jennings and Deke Nihilson published from 1988 to 1991 for young hardcore punks in the gay underground. Its editors also organized events, and bands such as Fugazi and MDC played them.
 
 Dog Eared Books opened in the space in 2016. In 2021 the store's manager bought it and reopened it as Fabulosa Books on September 15. The owner said the store is mindful of occupying the same space as A Different Light, which served queer San Francisco through the 1980s, 1990s, and early 2000s.
 
@@ -35,7 +35,6 @@ Sources:
 - Michael Flanagan, [“The History of LGBT Bookstores in the Castro,” *Bay Area Reporter*, July 17, 2016](https://www.ebar.com/story.php?ch=arts__culture&sc=books&id=200927).
 - [“Dog Eared Books on Castro St. Becoming Fabulosa Books,” *Shelf Awareness*, August 26, 2021](https://www.shelf-awareness.com/theshelf/2021-08-26/dog_eared_books_on_castro_st._becoming_fabulosa_books.html).
 - [“A Different Light (bookstore),” Wikipedia](https://en.wikipedia.org/wiki/A_Different_Light_(bookstore)).
-- Alexander Chee, *How to Write an Autobiographical Novel: Essays* (Mariner Books, 2018).
 - [“Castro Camera,” Wikipedia](https://en.wikipedia.org/wiki/Castro_Camera).
 - [“Castro District, San Francisco,” Wikipedia](https://en.wikipedia.org/wiki/Castro_District,_San_Francisco).
 - [“Homocore (zine),” Wikipedia](https://en.wikipedia.org/wiki/Homocore_(zine)).
