@@ -6,7 +6,7 @@
 
 ---
 
-## Part 1: A Paper Calendar on the Wall
+## Part 1: A Cat Calendar on the Wall
 
 ### The store
 
@@ -18,17 +18,17 @@ The staff are the real crew, by first name. Their availability in the examples i
 
 ### The store's history
 
-Fabulosa Books is at 489 Castro Street. Until 2011, that address was A Different Light, a chain of LGBT bookstores that started in Los Angeles in 1979. When it closed in 2011, the San Francisco store was the chain's last.
+Fabulosa Books is at 489 Castro Street. Until 2011, the building housed A Different Light, a chain of LGBT bookstores that started in Los Angeles in 1979. When the chain closed, its San Francisco store was the last one open.
 
-The Castro is one of the first gay neighborhoods in the United States. Its business district runs along Castro Street from Market Street to 19th Street. In the 1970s, Harvey Milk ran Castro Camera at 575 Castro Street, about a block south of this store. The camera shop became the center of the neighborhood's growing gay community and the headquarters for Milk's campaigns for office. People called him the "Mayor of Castro Street."
+The Castro is one of the first gay neighborhoods in the United States. Its business district runs along Castro Street from Market Street to 19th Street. About a block south of the store, at 575 Castro Street, Harvey Milk ran Castro Camera through the 1970s. Young gay people arriving from across the country came to the shop, and it became the headquarters for Milk's campaigns for office. People called him the "Mayor of Castro Street."
 
-The store hosted gay and lesbian writers series. The chain's Lesbian Writers Series began in 1984. Its one rule was that every reader's name appeared in the publicity, so no reader could stay in the closet. James Carroll Pickett, a playwright and store employee, launched the Gay Writers Series and hosted its monthly readings from 1987 to 1990. Thom Gunn and Kevin Killian read in the gay series, and Dorothy Allison and Kitty Tsui read in the lesbian series.
+The Castro had gay bookstores before A Different Light. Paperback Traffic opened at 558 Castro in 1972 and was the first bookstore in the Castro with significant gay content.
 
-The store's Community Space Series opened the store to outside groups, including ACT UP (the AIDS Coalition To Unleash Power), HomoCore, and GLOE. HomoCore was a San Francisco zine that Tom Jennings and Deke Nihilson published from 1988 to 1991. It was aimed at hardcore punk youth in the gay underground, and its editors organized HomoCore events where bands such as Fugazi and MDC played. ACT UP met in the store's backyard, as Alexander Chee documents in *How to Write an Autobiographical Novel: Essays*.
+The store hosted gay and lesbian writers series. The chain's Lesbian Writers Series began in 1984, with one rule: every reader's name went into the publicity, so nobody could read in the closet. Playwright James Carroll Pickett, who also worked at the store, started the Gay Writers Series and hosted its monthly readings from 1987 to 1990. Readers included Thom Gunn and Kevin Killian in the gay series, and Dorothy Allison and Kitty Tsui in the lesbian series.
 
-The Castro had gay bookstores before A Different Light. Paperback Traffic opened at 558 Castro in 1972. It was the first bookstore in the Castro with significant gay content.
+The Community Space Series opened the store to outside groups, among them ACT UP (the AIDS Coalition To Unleash Power), HomoCore, and GLOE (Gay & Lesbian Outreach and Engagement). ACT UP met at the store, according to Alexander Chee's essay collection *How to Write an Autobiographical Novel: Essays*. HomoCore was a San Francisco zine that Tom Jennings and Deke Nihilson published from 1988 to 1991 for young hardcore punks in the gay underground. Its editors also organized events, and bands such as Fugazi and MDC played them.
 
-Dog Eared Books opened in the space in 2016. In 2021 the store's owner, who had managed Dog Eared, bought it and reopened it as Fabulosa Books on September 15. The new owner said the store was mindful of occupying the same space as A Different Light, which served queer San Francisco through the 1980s, 1990s, and early 2000s.
+Dog Eared Books opened in the space in 2016. In 2021 the store's manager bought it and reopened it as Fabulosa Books on September 15. The owner said the store is mindful of occupying the same space as A Different Light, which served queer San Francisco through the 1980s, 1990s, and early 2000s.
 
 Sources:
 
@@ -43,7 +43,7 @@ Sources:
 
 ### The schedule on the wall
 
-The schedule used to be a calendar on the wall behind the register, written in by hand each week. To see a shift, you came into the store. To swap one, you crossed out a name and wrote in another.
+The schedule used to be a cat calendar on the wall behind the register, written in by hand each week. To see a shift, you came into the store. To swap one, you crossed out a name and wrote in another.
 
 Writing in the names was the quick part. The manager had to keep track of who couldn't work Sundays, who had asked for a Wednesday off, who held keys, who was close to their weekly limit, and who had closed three Saturdays running. None of that was on the calendar.
 
