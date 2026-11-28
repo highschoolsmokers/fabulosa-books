@@ -6,7 +6,7 @@
 
 ---
 
-## Part 1: The Schedule on the Wall
+## Part 1: A Paper Calendar on the Wall
 
 ### The store
 
@@ -20,7 +20,7 @@ The staff are the real crew, by first name. Their availability in the examples i
 
 Fabulosa Books is at 489 Castro Street. Until 2011, that address was A Different Light, a chain of LGBT bookstores that started in Los Angeles in 1979. When it closed in 2011, the San Francisco store was the chain's last.
 
-The store ran a gay writers series and a lesbian writers series. Its Community Space Series opened the store to outside groups, including ACT UP (the AIDS Coalition To Unleash Power), HomoCore, and GLOE.
+The store ran a gay writers series and a lesbian writers series. Its Community Space Series opened the store to outside groups, including ACT UP (the AIDS Coalition To Unleash Power), HomoCore, and GLOE. ACT UP met in the store's backyard, as Alexander Chee documents in *How to Write an Autobiographical Novel: Essays*.
 
 The Castro is a historically gay neighborhood, and it had gay bookstores before A Different Light. Paperback Traffic opened at 558 Castro in 1972. It was the first bookstore in the Castro with significant gay content.
 
@@ -31,6 +31,7 @@ Sources:
 - Michael Flanagan, [“The History of LGBT Bookstores in the Castro,” *Bay Area Reporter*, July 17, 2016](https://www.ebar.com/story.php?ch=arts__culture&sc=books&id=200927).
 - [“Dog Eared Books on Castro St. Becoming Fabulosa Books,” *Shelf Awareness*, August 26, 2021](https://www.shelf-awareness.com/theshelf/2021-08-26/dog_eared_books_on_castro_st._becoming_fabulosa_books.html).
 - [“A Different Light (bookstore),” Wikipedia](https://en.wikipedia.org/wiki/A_Different_Light_(bookstore)).
+- Alexander Chee, *How to Write an Autobiographical Novel: Essays* (Mariner Books, 2018).
 
 ### The schedule on the wall
 
