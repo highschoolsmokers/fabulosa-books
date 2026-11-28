@@ -6,7 +6,7 @@
 
 ---
 
-## Part 1: A Paper Calendar on the Wall
+## Part 1: A Cat Calendar on the Wall
 
 ### The store
 
