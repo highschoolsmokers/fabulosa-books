@@ -18,17 +18,19 @@ The staff are the real crew, by first name. Their availability in the examples i
 
 ### The store's history
 
-Fabulosa Books is at 489 Castro Street. Until 2011 the building housed A Different Light, a chain of LGBT bookstores that started in Los Angeles in 1979. When the chain closed, its San Francisco store was the last one open.
+Fabulosa Books is at 489 Castro Street. For about a quarter century, the building was A Different Light, a chain of LGBT bookstores that began in Los Angeles in 1979. When the chain closed in 2011, its San Francisco store was the last one open.
 
-The Castro is one of the first gay neighborhoods in the United States. Its business district runs along Castro Street from Market Street to 19th Street. Walk a block south from the store and you reach 575 Castro Street, where Harvey Milk ran Castro Camera through the 1970s. Young gay people arriving from across the country came to the shop. It became the headquarters for Milk's campaigns for office, and people called him the "Mayor of Castro Street." A plaque set into the sidewalk out front memorializes him.
+The Castro is one of the first gay neighborhoods in the United States. Its business district runs along Castro Street from Market Street to 19th Street. Walk a block south from the store, and you reach 575 Castro Street. Harvey Milk ran Castro Camera there through the 1970s. Young gay people arriving from across the country came to the shop. It became the headquarters for Milk's campaigns for office. People called him the "Mayor of Castro Street." A metal plaque in the sidewalk out front memorializes him.
 
-The street had gay bookstores before A Different Light. Paperback Traffic opened at 558 Castro in 1972. It was the first bookstore in the Castro with significant gay content.
+The street had gay bookstores before A Different Light. Paperback Traffic opened at 558 Castro in 1972 and was the first bookstore in the Castro with significant gay content.
 
-The store hosted gay and lesbian writers series. The chain's Lesbian Writers Series began in 1984. Its one rule was that every reader's name went into the publicity, so no one could hide. Playwright James Carroll Pickett, who also worked at the store, started the Gay Writers Series and hosted its monthly readings from 1987 to 1990. Thom Gunn and Kevin Killian read in the gay series. Dorothy Allison and Kitty Tsui read in the lesbian series.
+The store hosted gay and lesbian writers series. The chain's Lesbian Writers Series began in 1984, and its one rule was that every reader's name went into the publicity. No one could hide. Playwright James Carroll Pickett, who also worked at the store, started the Gay Writers Series and hosted its monthly readings from 1987 to 1990. Thom Gunn and Kevin Killian read in the gay series. Dorothy Allison and Kitty Tsui read in the lesbian series.
 
-The Community Space Series opened the store to outside groups, among them ACT UP (the AIDS Coalition To Unleash Power), HomoCore, and GLOE (Gay & Lesbian Outreach and Engagement). HomoCore was a San Francisco zine. Tom Jennings and Deke Nihilson published it from 1988 to 1991 for young hardcore punks in the gay underground. The editors also organized events, and bands such as Fugazi and MDC played them.
+The Community Space Series opened the store to outside groups. Among them were ACT UP (the AIDS Coalition To Unleash Power), HomoCore, and GLOE (Gay & Lesbian Outreach and Engagement). HomoCore was a San Francisco zine that Tom Jennings and Deke Nihilson published from 1988 to 1991 for young hardcore punks in the gay underground. Its editors organized events, and bands such as Fugazi and MDC played them.
 
 Dog Eared Books opened in the space in 2016. In 2021 the store's manager bought it and reopened it as Fabulosa Books on September 15. The owner said the store is mindful of occupying the same space as A Different Light, which served queer San Francisco through the 1980s, 1990s, and early 2000s.
+
+In 2016, Michael Flanagan wrote in the *Bay Area Reporter* about the Castro's LGBT bookstores: "We have lost much, but much still remains." The building has held three bookstores. Fabulosa Books still sells queer books at the same address.
 
 ### A cat calendar on the wall
 
