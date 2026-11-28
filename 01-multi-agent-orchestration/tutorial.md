@@ -18,27 +18,19 @@ The staff are the real crew, by first name. Their availability in the examples i
 
 ### The store's history
 
-The Castro is named for José Castro, a governor of Alta California. The neighborhood took shape in 1887, when a streetcar line linked Eureka Valley to downtown.
+The Castro took shape in 1887, when a streetcar line linked Eureka Valley to downtown San Francisco. Through the 1960s and 1970s it changed from a working-class neighborhood into one with some of the highest concentrations of same-sex couples. Young gay people, mostly men, came from across the country to a place where their sexual orientation was accepted.
 
-Through the 1960s and 1970s the district changed from a working-class neighborhood into one with some of the highest concentrations of same-sex couples. Young gay people, mostly men, came from across the country to a place where their sexual orientation was accepted.
+Walk a block south from the store, and you reach 575 Castro Street. Harvey Milk ran Castro Camera there from 1972 until he was assassinated in 1978. He was the first openly gay man elected to public office in California, and he served less than a year on the Board of Supervisors. The shop became the headquarters for his campaigns, and people called him the "Mayor of Castro Street." A metal plaque in the sidewalk out front memorializes him.
 
-Walk a block south from the store, and you reach 575 Castro Street. Harvey Milk ran Castro Camera there from 1972 until he was assassinated in 1978.
+In 1978, while Milk was in office, 489 Castro Street was the Obelisk, a designer gift shop. I see the building's obelisk-shaped door handles every day.
 
-Milk was the first openly gay man elected to public office in California. He served less than a year on the Board of Supervisors before he was killed, along with Mayor George Moscone, in November 1978.
+A Different Light, a chain of LGBT bookstores that began in Los Angeles in 1979, opened its San Francisco branch at 489 Castro Street later in the 1980s.
 
-The shop became the headquarters for Milk's campaigns, and people called him the "Mayor of Castro Street." A metal plaque in the sidewalk out front memorializes him.
+The Lesbian Writers Series began in 1984, before the Castro branch opened, with one rule: every reader's name went into the publicity. The gay writers series met monthly from 1987 to 1990. Thom Gunn and Kevin Killian read in the gay series. Dorothy Allison and Kitty Tsui read in the lesbian series.
 
-In 1978, while Milk was in office, 489 Castro Street was the Obelisk, a designer gift shop.
+The store opened its space to outside groups, including ACT UP (the AIDS Coalition To Unleash Power), HomoCore, and GLOE (Gay & Lesbian Outreach and Engagement).
 
-I see the building's obelisk-shaped door handles every day.
-
-A Different Light, a chain of LGBT bookstores that began in Los Angeles in 1979, opened its San Francisco branch at 489 Castro Street later in the 1980s. In January 1989, Richard Labonté became its manager.
-
-The chain's Lesbian Writers Series had begun in 1984, before the Castro branch opened. Its one rule was that every reader's name went into the publicity. Playwright James Carroll Pickett launched the Gay Writers Series and hosted its monthly readings from 1987 to 1990.
-
-The store opened its space to outside groups, among them ACT UP (the AIDS Coalition To Unleash Power), HomoCore, and GLOE (Gay & Lesbian Outreach and Engagement).
-
-HomoCore was a San Francisco zine that Tom Jennings and Deke Nihilson published from 1988 to 1991 for young hardcore punks in the gay underground.
+HomoCore was a San Francisco zine for young hardcore punks in the gay underground, published from 1988 to 1991.
 
 The chain closed in 2011. Its San Francisco branch was the last one still open.
 
