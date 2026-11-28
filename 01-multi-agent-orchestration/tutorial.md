@@ -18,11 +18,9 @@ The staff are the real crew, by first name. Their availability in the examples i
 
 ### The store's history
 
-The Castro is one of the first gay neighborhoods in the United States. Its business district runs along Castro Street from Market Street to 19th Street.
+The Castro was named for José Castro, a governor of Alta California. The neighborhood took shape in 1887, when a streetcar line linked Eureka Valley to downtown San Francisco. Through the 1960s and 1970s it changed from a working-class neighborhood into one with some of the highest concentrations of same-sex couples. It was one of the first gay neighborhoods in the United States. San Francisco's gay village is mostly concentrated in its business district, on Castro Street from Market Street to 19th Street. Young gay people, mostly men, came from across the country to a place where their sexual orientation was accepted.
 
-In the 1970s, Harvey Milk ran Castro Camera at 575 Castro Street, a block south of 489. Young gay people who had come to the neighborhood from across the country found their way to the shop. The shop became the headquarters for Milk's campaigns for office, and people called him the "Mayor of Castro Street." A metal plaque in the sidewalk out front memorializes him.
-
-Paperback Traffic was the first bookstore in the neighborhood with significant gay content. It opened at 558 Castro Street in 1972.
+Harvey Milk, the first openly gay man elected to public office in California, was tragically assassinated in 1978, less than a year into his term on the San Francisco Board of Supervisors. From 1972 until then, he ran Castro Camera at 575 Castro Street, a block south of 489. The shop became the headquarters for Milk's campaigns for office, and people called him the "Mayor of Castro Street." A metal plaque in the sidewalk out front memorializes him.
 
 A Different Light was a chain of LGBT bookstores founded in Los Angeles in 1979. Its San Francisco branch opened at 489 Castro Street later in the 1980s.
 
