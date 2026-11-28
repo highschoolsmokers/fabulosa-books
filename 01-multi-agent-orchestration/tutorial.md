@@ -20,9 +20,13 @@ The staff are the real crew, by first name. Their availability in the examples i
 
 Fabulosa Books is at 489 Castro Street. Until 2011, that address was A Different Light, a chain of LGBT bookstores that started in Los Angeles in 1979. When it closed in 2011, the San Francisco store was the chain's last.
 
-The store ran a gay writers series and a lesbian writers series. Its Community Space Series opened the store to outside groups, including ACT UP (the AIDS Coalition To Unleash Power), HomoCore, and GLOE. ACT UP met in the store's backyard, as Alexander Chee documents in *How to Write an Autobiographical Novel: Essays*.
+The Castro is one of the first gay neighborhoods in the United States. Its business district runs along Castro Street from Market Street to 19th Street. In the 1970s, Harvey Milk ran Castro Camera at 575 Castro Street, about a block south of this store. The camera shop became the center of the neighborhood's growing gay community and the headquarters for Milk's campaigns for office. People called him the "Mayor of Castro Street."
 
-The Castro is a historically gay neighborhood, and it had gay bookstores before A Different Light. Paperback Traffic opened at 558 Castro in 1972. It was the first bookstore in the Castro with significant gay content.
+The store hosted gay and lesbian writers series. The chain's Lesbian Writers Series began in 1984. Its one rule was that every reader's name appeared in the publicity, so no reader could stay in the closet. James Carroll Pickett, a playwright and store employee, launched the Gay Writers Series and hosted its monthly readings from 1987 to 1990. Thom Gunn and Kevin Killian read in the gay series, and Dorothy Allison and Kitty Tsui read in the lesbian series.
+
+The store's Community Space Series opened the store to outside groups, including ACT UP (the AIDS Coalition To Unleash Power), HomoCore, and GLOE. HomoCore was a San Francisco zine that Tom Jennings and Deke Nihilson published from 1988 to 1991. It was aimed at hardcore punk youth in the gay underground, and its editors organized HomoCore events where bands such as Fugazi and MDC played. ACT UP met in the store's backyard, as Alexander Chee documents in *How to Write an Autobiographical Novel: Essays*.
+
+The Castro had gay bookstores before A Different Light. Paperback Traffic opened at 558 Castro in 1972. It was the first bookstore in the Castro with significant gay content.
 
 Dog Eared Books opened in the space in 2016. In 2021 the store's owner, who had managed Dog Eared, bought it and reopened it as Fabulosa Books on September 15. The new owner said the store was mindful of occupying the same space as A Different Light, which served queer San Francisco through the 1980s, 1990s, and early 2000s.
 
@@ -32,6 +36,10 @@ Sources:
 - [“Dog Eared Books on Castro St. Becoming Fabulosa Books,” *Shelf Awareness*, August 26, 2021](https://www.shelf-awareness.com/theshelf/2021-08-26/dog_eared_books_on_castro_st._becoming_fabulosa_books.html).
 - [“A Different Light (bookstore),” Wikipedia](https://en.wikipedia.org/wiki/A_Different_Light_(bookstore)).
 - Alexander Chee, *How to Write an Autobiographical Novel: Essays* (Mariner Books, 2018).
+- [“Castro Camera,” Wikipedia](https://en.wikipedia.org/wiki/Castro_Camera).
+- [“Castro District, San Francisco,” Wikipedia](https://en.wikipedia.org/wiki/Castro_District,_San_Francisco).
+- [“Homocore (zine),” Wikipedia](https://en.wikipedia.org/wiki/Homocore_(zine)).
+- [Laila Lalami, “Lesbian Writers Series,” March 30, 2004](https://lailalalami.com/2004/03/lesbian-writers-series/), quoting the *Los Angeles Times*.
 
 ### The schedule on the wall
 
