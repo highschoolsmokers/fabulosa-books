@@ -18,29 +18,49 @@ The staff are the real crew, by first name. Their availability in the examples i
 
 ### The store's history
 
-The Castro was named for José Castro, a governor of Alta California. The neighborhood took shape in 1887, when a streetcar line linked Eureka Valley to downtown San Francisco. Through the 1960s and 1970s it changed from a working-class neighborhood into one with some of the highest concentrations of same-sex couples. It was one of the first gay neighborhoods in the United States. San Francisco's gay village is mostly concentrated in its business district, on Castro Street from Market Street to 19th Street. Young gay people, mostly men, came from across the country to a place where their sexual orientation was accepted.
+The Castro is named for José Castro, a governor of Alta California. The neighborhood took shape in 1887, when a streetcar line linked Eureka Valley to downtown San Francisco.
 
-Harvey Milk, the first openly gay man elected to public office in California, was tragically assassinated in 1978, less than a year into his term on the San Francisco Board of Supervisors. From 1972 until then, he ran Castro Camera at 575 Castro Street, a block south of 489. The shop became the headquarters for Milk's campaigns for office, and people called him the "Mayor of Castro Street." A metal plaque in the sidewalk out front memorializes him.
+Through the 1960s and 1970s the district changed from a working-class neighborhood into one with some of the highest concentrations of same-sex couples. It became one of the first gay neighborhoods in the United States. Young gay people, mostly men, came from across the country to a place where their sexual orientation was accepted.
 
-In 1978, while Milk was in office, 489 Castro Street was the Obelisk, a designer gift shop. Jack Fritscher's photographs from that year include a bodybuilder known as the Rent-A-Pose posing in the shop's doorway. The building still has obelisk-shaped door handles.
+Walk Castro Street from Market Street to 19th Street, and you walk through the middle of San Francisco's gay village.
 
-A Different Light was a chain of LGBT bookstores founded in Los Angeles in 1979. Its San Francisco branch opened at 489 Castro Street later in the 1980s.
+Walk a block south from the store, and you reach 575 Castro Street. Harvey Milk ran Castro Camera there from 1972 until he was assassinated in 1978.
 
-The bookstore hosted gay and lesbian writers series. The Lesbian Writers Series began in 1984, before the Castro branch opened. Its one rule was that every reader's name went into the publicity, so no one could hide. Playwright James Carroll Pickett, who also worked at the store, launched the Gay Writers Series and hosted its monthly readings from 1987 to 1990. Readers in the gay series included Thom Gunn and Kevin Killian. Dorothy Allison and Kitty Tsui read in the lesbian series.
+Milk was the first openly gay man elected to public office in California. He served less than a year on the San Francisco Board of Supervisors before former supervisor Dan White shot him, along with Mayor George Moscone, in November 1978.
 
-The Community Space Series opened its space to outside groups. Among them were ACT UP (the AIDS Coalition To Unleash Power), HomoCore, and GLOE (Gay & Lesbian Outreach and Engagement).
+The shop became the headquarters for Milk's campaigns for office, and people called him the "Mayor of Castro Street." A metal plaque in the sidewalk out front memorializes him.
 
-HomoCore was a San Francisco zine. Tom Jennings and Deke Nihilson published it from 1988 to 1991 for young hardcore punks in the gay underground. Its editors also organized events, and bands such as Fugazi and MDC played them.
+In 1978, while Milk was in office, 489 Castro Street was the Obelisk, a designer gift shop. Jack Fritscher's photographs from that year include a bodybuilder known as the Rent-A-Pose posing in the shop's doorway.
 
-The chain closed in 2011. Its San Francisco branch was the last one still open.
+I see the building's obelisk-shaped door handles every day.
+
+A Different Light opened in October 1979 at 4014 Santa Monica Boulevard in Silver Lake, Los Angeles. George Leigh and Norman Laurila founded it. Richard Labonté suggested the name, which comes from Elizabeth Lynn's novel *A Different Light*.
+
+Over its history the chain had four stores, including branches in New York and West Hollywood. At its zenith it employed more than 80 people, and it hosted author events, art shows, reading groups, and panel discussions.
+
+The San Francisco branch opened at 489 Castro Street later in the 1980s. In January 1989, Richard Labonté took over as its manager, and several literary series followed.
+
+The chain's Lesbian Writers Series had begun in 1984, before the Castro branch opened. Its one rule was that every reader's name went into the publicity, so no one could hide. Playwright James Carroll Pickett, who also worked at the store, launched the Gay Writers Series and hosted its monthly readings from 1987 to 1990. Readers in the gay series included Thom Gunn and Kevin Killian. Dorothy Allison and Kitty Tsui read in the lesbian series.
+
+Jack Fritscher and Mark Hemry later made short documentaries of many of the authors who read there.
+
+Other events filled the months too. Artwords presented openings by performance artists, musicians, photographers, and painters. The Social Studies Series brought lectures by authors such as Tobias Schneebaum.
+
+The Community Space Series opened the space to outside groups, among them ACT UP (the AIDS Coalition To Unleash Power), HomoCore, and GLOE (Gay & Lesbian Outreach and Engagement).
+
+HomoCore was a San Francisco zine that Tom Jennings and Deke Nihilson published from 1988 to 1991 for young hardcore punks in the gay underground. Its editors also organized events, and Fugazi and MDC played them.
+
+Ken White, who worked at the store, later wrote about its staff in the 1990s. Justin Vivian Bond staffed the front counter. Betty and Pansy, two employees, partnered on a 1993 guide, *Betty and Pansy's Severe Queer Review of San Francisco*.
+
+The chain closed in 2011. Its San Francisco branch was the last store still open, and it was the last LGBT bookstore in California.
 
 Dog Eared Books moved into the space in 2016.
 
-In 2016, Michael Flanagan wrote in the *Bay Area Reporter* about the Castro's LGBT bookstores: "We have lost much, but much still remains."
+That year, Michael Flanagan wrote in the *Bay Area Reporter* about the Castro's LGBT bookstores: "We have lost much, but much still remains."
 
 In 2021 the manager bought the business and reopened it as Fabulosa Books on September 15. The owner said the shop is mindful of occupying the same space as A Different Light, which served queer San Francisco through the 1980s, 1990s, and early 2000s.
 
-The address has housed three bookstores. Fabulosa Books still sells queer books there.
+Three bookstores have occupied the building. Fabulosa Books still sells queer books there, and I work there.
 
 ### A cat calendar on the wall
 
