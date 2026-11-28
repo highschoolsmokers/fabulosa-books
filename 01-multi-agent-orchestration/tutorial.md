@@ -30,16 +30,6 @@ The Community Space Series opened the store to outside groups, among them ACT UP
 
 Dog Eared Books opened in the space in 2016. In 2021 the store's manager bought it and reopened it as Fabulosa Books on September 15. The owner said the store is mindful of occupying the same space as A Different Light, which served queer San Francisco through the 1980s, 1990s, and early 2000s.
 
-Sources:
-
-- Michael Flanagan, [“The History of LGBT Bookstores in the Castro,” *Bay Area Reporter*, July 17, 2016](https://www.ebar.com/story.php?ch=arts__culture&sc=books&id=200927).
-- [“Dog Eared Books on Castro St. Becoming Fabulosa Books,” *Shelf Awareness*, August 26, 2021](https://www.shelf-awareness.com/theshelf/2021-08-26/dog_eared_books_on_castro_st._becoming_fabulosa_books.html).
-- [“A Different Light (bookstore),” Wikipedia](https://en.wikipedia.org/wiki/A_Different_Light_(bookstore)).
-- [“Castro Camera,” Wikipedia](https://en.wikipedia.org/wiki/Castro_Camera).
-- [“Castro District, San Francisco,” Wikipedia](https://en.wikipedia.org/wiki/Castro_District,_San_Francisco).
-- [“Homocore (zine),” Wikipedia](https://en.wikipedia.org/wiki/Homocore_(zine)).
-- [Laila Lalami, “Lesbian Writers Series,” March 30, 2004](https://lailalalami.com/2004/03/lesbian-writers-series/), quoting the *Los Angeles Times*.
-
 ### A cat calendar on the wall
 
 The schedule used to be a cat calendar on the wall behind the register, written in by hand each week. To see a shift, you came into the store. To swap one, you crossed out a name and wrote in another.
