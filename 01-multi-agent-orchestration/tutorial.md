@@ -42,9 +42,11 @@ The address has housed three bookstores. Fabulosa Books still sells queer books 
 
 ### A cat calendar on the wall
 
-The schedule used to be a cat calendar on the wall behind the register, written in by hand each week. To see a shift, you came into the store. To swap one, you crossed out a name and wrote in another.
+The schedule hung behind the register on a cat calendar. The manager wrote it in by hand each week.
 
-Writing in the names was the quick part. The manager had to keep track of who couldn't work Sundays, who had asked for a Wednesday off, who held keys, who was close to their weekly limit, and who had closed three Saturdays running. None of that was on the calendar.
+To see a shift, you came into the store and read the wall. To trade one, you crossed out a name and put another in its place.
+
+Writing the names in was the easy part. The manager also carried everything the calendar could not show: who couldn't work Sundays, who had asked for a Wednesday off, who held keys, who was close to the weekly limit, and who had closed three Saturdays running.
 
 ### Hours and shifts
 
