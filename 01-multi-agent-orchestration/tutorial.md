@@ -16,11 +16,27 @@ Fabulosa Books is an independent bookstore in San Francisco's Castro. I work the
 
 The staff are the real crew, by first name. Their availability in the examples is made up; the store's hours and its scheduling problem are real.
 
+### The store's history
+
+Fabulosa Books is at 489 Castro Street. Until 2011, that address was A Different Light, a chain of LGBT bookstores that started in Los Angeles in 1979. When it closed in 2011, the San Francisco store was the chain's last.
+
+The store ran a gay writers series and a lesbian writers series. Its Community Space Series opened the store to outside groups, including ACT UP (the AIDS Coalition To Unleash Power), HomoCore, and GLOE.
+
+The Castro is a historically gay neighborhood, and it had gay bookstores before A Different Light. Paperback Traffic opened at 558 Castro in 1972. It was the first bookstore in the Castro with significant gay content.
+
+Dog Eared Books opened in the space in 2016. In 2021 the store's owner, who had managed Dog Eared, bought it and reopened it as Fabulosa Books on September 15. The new owner said the store was mindful of occupying the same space as A Different Light, which served queer San Francisco through the 1980s, 1990s, and early 2000s.
+
+Sources:
+
+- Michael Flanagan, [“The History of LGBT Bookstores in the Castro,” *Bay Area Reporter*, July 17, 2016](https://www.ebar.com/story.php?ch=arts__culture&sc=books&id=200927).
+- [“Dog Eared Books on Castro St. Becoming Fabulosa Books,” *Shelf Awareness*, August 26, 2021](https://www.shelf-awareness.com/theshelf/2021-08-26/dog_eared_books_on_castro_st._becoming_fabulosa_books.html).
+- [“A Different Light (bookstore),” Wikipedia](https://en.wikipedia.org/wiki/A_Different_Light_(bookstore)).
+
 ### The schedule on the wall
 
-The schedule used to be a sheet of paper taped up behind the register. The manager filled it in by hand each week. To see a shift, you came into the store. To swap one, you crossed out a name and wrote in another.
+The schedule used to be a calendar on the wall behind the register, written in by hand each week. To see a shift, you came into the store. To swap one, you crossed out a name and wrote in another.
 
-Writing in the names was the quick part. The manager had to keep track of who couldn't work Sundays, who had asked for a Wednesday off, who held keys, who was close to their weekly limit, and who had closed three Saturdays running. None of that was on the paper.
+Writing in the names was the quick part. The manager had to keep track of who couldn't work Sundays, who had asked for a Wednesday off, who held keys, who was close to their weekly limit, and who had closed three Saturdays running. None of that was on the calendar.
 
 ### Hours and shifts
 
